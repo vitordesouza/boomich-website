@@ -1,0 +1,79 @@
+---
+import { site } from '../content/site';
+import Mark from './Mark.astro';
+---
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__main">
+      <p class="footer__registration">
+        <Mark small size={18} />{site.footer.registration}
+      </p>
+      <nav aria-label="Footer navigation">
+        <a href={site.footer.source.href}>{site.footer.source.label}</a>
+        <a href={site.footer.backToTop.href}>{site.footer.backToTop.label}</a>
+      </nav>
+    </div>
+    <p class="footer__colophon">{site.footer.colophon}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 0 var(--gutter) clamp(2rem, 5vw, 4rem);
+    background: var(--color-ground-recessed);
+  }
+
+  .footer__inner {
+    width: min(100%, var(--maxw));
+    margin: 0 auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .footer__main {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .footer__registration,
+  .footer__colophon {
+    margin: 0;
+    color: var(--color-ink-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .footer__registration {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  nav a {
+    color: var(--color-ink-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-underline-offset: 0.18em;
+  }
+
+  .footer__colophon {
+    margin-top: 1.25rem;
+    color: var(--color-ink-faint);
+  }
+
+  @media (max-width: 560px) {
+    .footer__main {
+      display: grid;
+      align-items: start;
+    }
+  }
+</style>

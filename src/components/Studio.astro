@@ -1,0 +1,148 @@
+---
+import { site } from '../content/site';
+---
+
+<section id="studio" class="studio" aria-labelledby="studio-heading">
+  <div class="studio__inner">
+    <h2 id="studio-heading">{site.studio.heading}</h2>
+    <div class="studio__intro">
+      <p class="studio__lead">{site.studio.lead}</p>
+      <div class="studio__detail">
+        <p>{site.studio.detail}</p>
+        <p>{site.studio.second}</p>
+      </div>
+    </div>
+    <div class="studio__stack" aria-label="Technology stack">
+      {
+        site.studio.stack.map((row) => (
+          <div class="studio__stack-row">
+            <h3>{row.label}</h3>
+            <ul>
+              {row.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <p class="studio__readout">{site.studio.readout}</p>
+  </div>
+</section>
+
+<style>
+  .studio {
+    padding: var(--section) var(--gutter);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .studio__inner {
+    width: min(100%, var(--maxw));
+    margin: 0 auto;
+  }
+
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--type-headline-size);
+    font-weight: var(--type-headline-weight);
+    letter-spacing: var(--type-headline-tracking);
+    line-height: var(--type-headline-leading);
+  }
+
+  .studio__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.93fr) minmax(0, 0.82fr);
+    gap: clamp(2.5rem, 10vw, 9rem);
+    margin-top: clamp(2.75rem, 6vw, 5.5rem);
+  }
+
+  .studio__lead {
+    max-width: 26ch;
+    font-size: clamp(1.25rem, 1.2rem + 0.7vw, 1.65rem);
+    line-height: 1.45;
+  }
+
+  .studio__detail {
+    display: grid;
+    gap: 1.4rem;
+    max-width: 57ch;
+    color: var(--color-ink-secondary);
+  }
+
+  .studio__stack {
+    margin-top: clamp(3.5rem, 8vw, 7.25rem);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .studio__stack-row {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.23fr) 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .studio__stack-row h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .studio__stack-row ul,
+  .studio__stack-row li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .studio__stack-row ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .studio__stack-row li {
+    padding: 0.34rem 0.5rem;
+    border: 1px solid var(--color-line);
+    color: var(--color-ink-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .studio__readout {
+    margin-top: 1.5rem;
+    color: var(--color-ink-faint);
+    font-family: var(--font-readout);
+    font-size: var(--type-readout-size);
+    font-weight: var(--type-readout-weight);
+    letter-spacing: var(--type-readout-tracking);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 759px) {
+    .studio__intro {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .studio__stack-row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .studio__readout {
+      font-size: 10px;
+      letter-spacing: 0.015em;
+    }
+  }
+</style>

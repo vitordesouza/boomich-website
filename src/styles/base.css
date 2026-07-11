@@ -36,6 +36,14 @@ select {
   font: inherit;
 }
 
+button {
+  transition: transform 160ms var(--ease-ui);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
 a {
   color: inherit;
 }

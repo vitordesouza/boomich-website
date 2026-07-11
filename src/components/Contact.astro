@@ -1,0 +1,157 @@
+---
+import { site } from '../content/site';
+---
+
+<section id="contact" class="contact" aria-labelledby="contact-heading">
+  <div class="contact__inner">
+    <h2 id="contact-heading">{site.contact.heading}</h2>
+    <p class="contact__body">{site.contact.body}</p>
+    <div class="contact__address">
+      <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+      <button
+        class="button-ghost copy-address"
+        type="button"
+        data-copy-address
+        data-address={site.contact.email}
+        data-copy-label={site.contact.copyLabel}
+        data-copied-label={site.contact.copiedLabel}
+      >
+        <span data-copy-address-label>{site.contact.copyLabel}</span>
+      </button>
+      <span class="visually-hidden" data-copy-address-live aria-live="polite"
+      ></span>
+    </div>
+    <a class="button-primary contact__cta" href={site.contact.primaryCta.href}
+      ><span>{site.contact.primaryCta.label}</span></a
+    >
+  </div>
+</section>
+
+<script>
+  const copyButton = document.querySelector<HTMLButtonElement>(
+    '[data-copy-address]',
+  );
+  const copyLabel = document.querySelector<HTMLElement>(
+    '[data-copy-address-label]',
+  );
+  const copyLive = document.querySelector<HTMLElement>(
+    '[data-copy-address-live]',
+  );
+  let restoreTimer = 0;
+
+  const legacyCopy = (address: string): boolean => {
+    const field = document.createElement('textarea');
+    field.value = address;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.append(field);
+    field.select();
+    const copied = document.execCommand('copy');
+    field.remove();
+    return copied;
+  };
+
+  const copyAddress = async (): Promise<void> => {
+    if (!copyButton || !copyLabel || !copyLive) return;
+    const address = copyButton.dataset.address;
+    const copyLabelText = copyButton.dataset.copyLabel;
+    const copiedLabelText = copyButton.dataset.copiedLabel;
+    if (!address || !copyLabelText || !copiedLabelText) return;
+    try {
+      if (navigator.clipboard?.writeText)
+        await navigator.clipboard.writeText(address);
+      else if (!legacyCopy(address)) throw new Error('Clipboard copy failed');
+      window.clearTimeout(restoreTimer);
+      copyButton.classList.add('is-copied');
+      copyLabel.textContent = copiedLabelText;
+      copyLive.textContent = 'Email address copied to clipboard.';
+      restoreTimer = window.setTimeout(() => {
+        copyButton.classList.remove('is-copied');
+        copyLabel.textContent = copyLabelText;
+        copyLive.textContent = '';
+      }, 1600);
+    } catch {
+      copyLive.textContent = 'Unable to copy the email address.';
+    }
+  };
+
+  copyButton?.addEventListener('click', () => void copyAddress());
+</script>
+
+<style>
+  .contact {
+    padding: clamp(104px, 14vw, 200px) var(--gutter) var(--section);
+    border-top: 1px solid var(--color-line);
+    background: var(--color-ground-recessed);
+  }
+
+  .contact__inner {
+    width: min(100%, var(--maxw));
+    margin: 0 auto;
+  }
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    max-width: 14ch;
+    font-family: var(--font-display);
+    font-size: var(--type-headline-size);
+    font-weight: var(--type-headline-weight);
+    letter-spacing: var(--type-headline-tracking);
+    line-height: var(--type-headline-leading);
+  }
+
+  .contact__body {
+    max-width: 53ch;
+    margin-top: 1.5rem;
+    color: var(--color-ink-secondary);
+  }
+
+  .contact__address {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+    align-items: center;
+    margin-top: clamp(2.75rem, 6vw, 5rem);
+  }
+
+  .contact__address > a {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 5.5vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: var(--type-headline-tracking);
+    line-height: 1.15;
+    white-space: nowrap;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  .copy-address {
+    --button-surface: var(--color-ground-recessed);
+    flex: 0 0 auto;
+  }
+
+  .copy-address.is-copied {
+    --button-line: var(--color-amber);
+    --button-text: var(--color-amber);
+  }
+
+  .contact__cta {
+    margin-top: 2rem;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

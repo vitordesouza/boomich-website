@@ -1,0 +1,132 @@
+---
+import { site } from '../content/site';
+---
+
+<section
+  id="capabilities"
+  class="capabilities"
+  aria-labelledby="capabilities-heading"
+>
+  <div class="capabilities__inner">
+    <h2 id="capabilities-heading">{site.capabilities.heading}</h2>
+    <div class="capabilities__rows">
+      {
+        site.capabilities.items.map((item) => (
+          <article class="spec-row">
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+            <ul aria-label={`${item.title} technologies`}>
+              {item.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .capabilities {
+    padding: var(--section) var(--gutter);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .capabilities__inner {
+    width: min(100%, var(--maxw));
+    margin: 0 auto;
+  }
+
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--type-headline-size);
+    font-weight: var(--type-headline-weight);
+    letter-spacing: var(--type-headline-tracking);
+    line-height: var(--type-headline-leading);
+  }
+
+  .capabilities__rows {
+    margin-top: clamp(2.25rem, 5vw, 4.5rem);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .spec-row {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.76fr) minmax(0, 1.25fr) minmax(
+        12rem,
+        0.82fr
+      );
+    gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+    padding: clamp(1.5rem, 3.5vw, 2.5rem) 0;
+    border-bottom: 1px solid var(--color-line);
+    transition: background-color 160ms var(--ease-ui);
+  }
+
+  .spec-row h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .spec-row p {
+    max-width: 55ch;
+    color: var(--color-ink-secondary);
+  }
+
+  .spec-row ul,
+  .spec-row li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .spec-row ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .spec-row li {
+    padding: 0.33rem 0.5rem;
+    border: 1px solid var(--color-line);
+    color: var(--color-ink-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .spec-row:hover {
+      background: var(--color-ground-raised);
+    }
+  }
+
+  @media (max-width: 879px) {
+    .spec-row {
+      grid-template-columns: minmax(0, 1fr) minmax(11rem, 0.65fr);
+    }
+
+    .spec-row p {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .spec-row {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .spec-row p {
+      grid-column: auto;
+    }
+  }
+</style>

@@ -1,6 +1,8 @@
 .button-primary,
 .button-ghost {
   --button-line: var(--color-line);
+  --button-surface: var(--color-ground);
+  --button-text: var(--color-ink);
   position: relative;
   display: inline-grid;
   place-items: center;
@@ -31,7 +33,7 @@
 
 .button-ghost {
   background: var(--button-line);
-  color: var(--color-ink);
+  color: var(--button-text);
   transition:
     transform 160ms var(--ease-ui),
     background-color 160ms var(--ease-ui);
@@ -40,7 +42,7 @@
 .button-ghost::before {
   position: absolute;
   inset: 1px;
-  background: var(--color-ground);
+  background: var(--button-surface);
   clip-path: polygon(
     calc(var(--chamfer) - 1px) 0,
     100% 0,
@@ -59,19 +61,21 @@
   padding: 14px 24px;
 }
 
-.button-primary:hover {
-  background: oklch(0.98 0.01 100);
-  transform: translateY(-1px);
-}
+@media (hover: hover) and (pointer: fine) {
+  .button-primary:hover {
+    background: oklch(0.98 0.01 100);
+    transform: translateY(-1px);
+  }
 
-.button-ghost:hover {
-  --button-line: var(--color-ink);
-  transform: translateY(-1px);
+  .button-ghost:hover {
+    --button-line: var(--color-ink);
+    transform: translateY(-1px);
+  }
 }
 
 .button-primary:active,
 .button-ghost:active {
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 
 .button-primary:focus-visible,

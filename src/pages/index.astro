@@ -1,6 +1,11 @@
 ---
+import Capabilities from '../components/Capabilities.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
 import Nav from '../components/Nav.astro';
+import Studio from '../components/Studio.astro';
+import Work from '../components/Work.astro';
 import { site } from '../content/site';
 import Base from '../layouts/Base.astro';
 ---
@@ -9,23 +14,10 @@ import Base from '../layouts/Base.astro';
   <Nav />
   <main id="top">
     <Hero />
-    <section
-      id="capabilities"
-      class="phase-placeholder"
-      aria-label="What we build"
-    >
-    </section>
-    <section id="work" class="phase-placeholder" aria-label="Shipped work">
-    </section>
-    <section id="studio" class="phase-placeholder" aria-label="Studio">
-    </section>
-    <section id="contact" class="phase-placeholder" aria-label="Contact">
-    </section>
+    <Capabilities />
+    <Work />
+    <Studio />
+    <Contact />
   </main>
+  <Footer />
 </Base>
-
-<style>
-  .phase-placeholder {
-    min-height: 1px;
-  }
-</style>

@@ -161,8 +161,10 @@ import Mark from './Mark.astro';
     transition: color 160ms var(--ease-ui);
   }
 
-  .site-nav__desktop-links a:hover {
-    color: var(--color-ink);
+  @media (hover: hover) and (pointer: fine) {
+    .site-nav__desktop-links a:hover {
+      color: var(--color-ink);
+    }
   }
 
   .site-nav__cta {
