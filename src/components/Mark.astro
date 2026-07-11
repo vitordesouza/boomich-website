@@ -1,10 +1,11 @@
 ---
 interface Props {
   small?: boolean;
+  size?: number;
   class?: string;
 }
 
-const { small = false, class: className } = Astro.props;
+const { small = false, size = 32, class: className } = Astro.props;
 const strokeWidth = small ? { mast: 13, truss: 13.5 } : { mast: 8, truss: 8.6 };
 const endpoints = small ? { top: 12.5, bottom: 87.5 } : { top: 11, bottom: 89 };
 ---
@@ -12,6 +13,8 @@ const endpoints = small ? { top: 12.5, bottom: 87.5 } : { top: 11, bottom: 89 };
 <svg
   class={className}
   viewBox="0 0 100 100"
+  width={size}
+  height={size}
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
   focusable="false"

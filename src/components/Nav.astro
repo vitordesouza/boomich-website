@@ -1,0 +1,237 @@
+---
+import { site } from '../content/site';
+import Mark from './Mark.astro';
+---
+
+<header class="site-nav" data-site-nav>
+  <nav class="site-nav__inner" aria-label="Primary navigation">
+    <a class="site-nav__brand" href="#top" aria-label="Boomich home">
+      <Mark small size={24} />
+      <span>Boomich</span>
+    </a>
+    <div class="site-nav__desktop-links">
+      {site.navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+    </div>
+    <a class="button-ghost site-nav__cta" href={site.navCta.href}
+      ><span>{site.navCta.label}</span></a
+    >
+    <button
+      class="site-nav__menu-button"
+      type="button"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="site-menu"
+    >
+      Menu
+    </button>
+  </nav>
+  <div class="site-nav__mobile-menu" id="site-menu" data-menu hidden>
+    <button
+      class="site-nav__close"
+      type="button"
+      data-menu-close
+      aria-label="Close menu">Close</button
+    >
+    <div class="site-nav__mobile-links">
+      {site.navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-site-nav]');
+  const toggle = nav?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = nav?.querySelector<HTMLElement>('[data-menu]');
+  const close = nav?.querySelector<HTMLButtonElement>('[data-menu-close]');
+  let opener: HTMLElement | null = null;
+
+  const setScrolled = (): void => {
+    nav?.classList.toggle('site-nav--scrolled', window.scrollY > 24);
+  };
+  const focusable = (): HTMLElement[] =>
+    menu
+      ? Array.from(
+          menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+        )
+      : [];
+  const closeMenu = (): void => {
+    if (!menu || !toggle) return;
+    menu.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+    opener?.focus();
+  };
+  const openMenu = (): void => {
+    if (!menu || !toggle) return;
+    opener = toggle;
+    menu.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('menu-open');
+    close?.focus();
+  };
+
+  toggle?.addEventListener('click', () =>
+    menu?.hidden ? openMenu() : closeMenu(),
+  );
+  close?.addEventListener('click', closeMenu);
+  menu?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) closeMenu();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (!menu || menu.hidden) return;
+    if (event.key === 'Escape') {
+      closeMenu();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const items = focusable();
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (!first || !last) return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+  window.addEventListener('scroll', setScrolled, { passive: true });
+  setScrolled();
+</script>
+
+<style>
+  .site-nav {
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    background: oklch(0.24 0.03 130 / 0.92);
+    backdrop-filter: saturate(0.82) brightness(0.86);
+  }
+
+  .site-nav::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: var(--color-line);
+    content: '';
+    opacity: 0;
+    transition: opacity 160ms var(--ease-ui);
+  }
+
+  .site-nav--scrolled::after {
+    opacity: 1;
+  }
+
+  .site-nav__inner {
+    display: flex;
+    align-items: center;
+    width: min(100%, calc(var(--maxw) + var(--gutter) * 2));
+    min-height: 72px;
+    margin: 0 auto;
+    padding-inline: var(--gutter);
+  }
+
+  .site-nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 1.13rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .site-nav__desktop-links {
+    display: flex;
+    gap: clamp(1rem, 2.25vw, 2rem);
+    margin-left: auto;
+  }
+
+  .site-nav__desktop-links a {
+    color: var(--color-ink-secondary);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 160ms var(--ease-ui);
+  }
+
+  .site-nav__desktop-links a:hover {
+    color: var(--color-ink);
+  }
+
+  .site-nav__cta {
+    min-height: 40px;
+    margin-left: clamp(1.25rem, 3vw, 2.75rem);
+  }
+
+  .site-nav__cta > span {
+    padding: 10px 14px;
+  }
+
+  .site-nav__menu-button,
+  .site-nav__close {
+    border: 0;
+    background: none;
+    color: var(--color-ink);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .site-nav__menu-button {
+    display: none;
+    margin-left: auto;
+  }
+
+  .site-nav__mobile-menu[hidden] {
+    display: none;
+  }
+
+  .site-nav__mobile-menu {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: max(20px, env(safe-area-inset-top)) var(--gutter)
+      max(20px, env(safe-area-inset-bottom));
+    background: var(--color-ground);
+  }
+
+  .site-nav__close {
+    justify-self: end;
+    padding: 0.6rem 0;
+  }
+
+  .site-nav__mobile-links {
+    display: grid;
+    align-content: center;
+    gap: 1.15rem;
+    padding-bottom: 10vh;
+  }
+
+  .site-nav__mobile-links a {
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 11vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: var(--type-display-tracking);
+    line-height: 1.03;
+    text-decoration: none;
+  }
+
+  @media (max-width: 759px) {
+    .site-nav__desktop-links,
+    .site-nav__cta {
+      display: none;
+    }
+
+    .site-nav__menu-button {
+      display: block;
+    }
+  }
+</style>

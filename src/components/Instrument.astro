@@ -1,0 +1,200 @@
+---
+import { site } from '../content/site';
+---
+
+<section
+  class="instrument"
+  data-instrument
+  aria-label="Interactive structural test"
+>
+  <div class="instrument__bed">
+    <canvas
+      class="instrument__canvas"
+      data-instrument-canvas
+      role="img"
+      aria-label="Interactive structural test: a cantilever truss that deflects under load and recovers."
+    ></canvas>
+    <button
+      class="instrument__hook-control"
+      data-instrument-hook
+      type="button"
+      aria-label="Apply load to the test article"></button>
+    <noscript>
+      <svg
+        class="instrument__fallback"
+        viewBox="0 0 460 220"
+        role="img"
+        aria-label="Static cantilever truss test article"
+      >
+        <line
+          x1="29"
+          y1="26"
+          x2="29"
+          y2="190"
+          stroke="oklch(0.95 0.01 100 / 0.16)"></line>
+        <g fill="none" stroke="oklch(0.95 0.01 100 / 0.55)" stroke-width="1.25">
+          <path d="M42 70 L116 73.75 L190 77.5 L264 81.25 L338 85"></path>
+          <path d="M42 134 L116 130.25 L190 126.5 L264 122.75 L338 119"></path>
+          <path
+            d="M116 73.75 V130.25 M190 77.5 V126.5 M264 81.25 V122.75 M338 85 V119"
+          ></path>
+          <path
+            d="M42 70 L116 130.25 M116 73.75 L190 126.5 M190 77.5 L264 122.75 M264 81.25 L338 119 M338 85 L386 102 M338 119 L386 102"
+          ></path>
+        </g>
+        <g fill="oklch(0.95 0.01 100 / 0.78)">
+          <rect x="40.5" y="68.5" width="3" height="3"></rect><rect
+            x="114.5"
+            y="72.25"
+            width="3"
+            height="3"></rect><rect x="188.5" y="76" width="3" height="3"
+          ></rect><rect x="262.5" y="79.75" width="3" height="3"></rect><rect
+            x="336.5"
+            y="83.5"
+            width="3"
+            height="3"></rect>
+          <rect x="40.5" y="132.5" width="3" height="3"></rect><rect
+            x="114.5"
+            y="128.75"
+            width="3"
+            height="3"></rect><rect x="188.5" y="125" width="3" height="3"
+          ></rect><rect x="262.5" y="121.25" width="3" height="3"></rect><rect
+            x="336.5"
+            y="117.5"
+            width="3"
+            height="3"></rect>
+          <rect x="383.5" y="99.5" width="5" height="5"></rect>
+        </g>
+      </svg>
+    </noscript>
+  </div>
+  <p class="instrument__caption">{site.hero.instrumentCaption}</p>
+  <div
+    class="readout-panel instrument__readout"
+    aria-label="Test article readout"
+  >
+    <p aria-hidden="true">
+      LOAD <span data-readout-load>0.0</span> kN · DEFLECTION <span
+        data-readout-deflection>0.0</span
+      > mm · <span data-readout-status>WITHIN TOLERANCE</span>
+    </p>
+    <span class="visually-hidden" aria-live="polite" data-readout-live
+      >LOAD 0.0 kN · DEFLECTION 0.0 mm · WITHIN TOLERANCE</span
+    >
+  </div>
+</section>
+
+<script>
+  import { mountInstrument } from '../instrument/controller';
+
+  document
+    .querySelectorAll<HTMLElement>('[data-instrument]')
+    .forEach((instrument) => {
+      mountInstrument(instrument);
+    });
+</script>
+
+<style>
+  .instrument {
+    width: 100%;
+  }
+
+  .instrument__bed {
+    position: relative;
+    min-height: 312px;
+    overflow: hidden;
+    background: var(--color-ground-raised);
+  }
+
+  .instrument__canvas,
+  .instrument__fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 312px;
+  }
+
+  .instrument__canvas {
+    touch-action: none;
+  }
+
+  .instrument__fallback {
+    padding: 0.5rem;
+  }
+
+  .instrument__hook-control {
+    position: absolute;
+    top: calc(46.4% - 44px);
+    left: calc(84.8% - 44px);
+    width: 88px;
+    height: 88px;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    cursor: grab;
+  }
+
+  .instrument__hook-control:active {
+    cursor: grabbing;
+  }
+
+  .instrument__caption {
+    margin: 1rem 0 0;
+    color: var(--color-ink-faint);
+    font-size: 0.875rem;
+  }
+
+  .instrument__readout {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0.7rem 0 0 auto;
+  }
+
+  .instrument__readout p {
+    margin: 0;
+    padding: 0.95rem 1rem;
+    color: var(--color-ink-secondary);
+    font-family: var(--font-readout);
+    font-size: var(--type-readout-size);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--type-readout-weight);
+    letter-spacing: var(--type-readout-tracking);
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .instrument__readout [data-readout-load],
+  .instrument__readout [data-readout-deflection],
+  .instrument__readout [data-readout-status] {
+    color: var(--color-amber);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 759px) {
+    .instrument__bed,
+    .instrument__canvas,
+    .instrument__fallback {
+      min-height: min(58vw, 380px);
+    }
+
+    .instrument__readout {
+      width: 100%;
+      margin-inline: 0;
+    }
+
+    .instrument__readout p {
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
+</style>

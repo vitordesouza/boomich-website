@@ -1,5 +1,6 @@
 @import './fonts.css';
 @import './tokens.css';
+@import './components.css';
 
 *,
 *::before,
@@ -24,6 +25,10 @@ body {
   line-height: var(--type-body-leading);
 }
 
+body.menu-open {
+  overflow: hidden;
+}
+
 button,
 input,
 textarea,
@@ -42,8 +47,8 @@ img {
 }
 
 ::selection {
-  background: var(--color-amber-deep);
-  color: var(--color-ink);
+  background: var(--color-ink-secondary);
+  color: var(--color-ground);
 }
 
 :focus-visible {

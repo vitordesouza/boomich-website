@@ -1,0 +1,114 @@
+.button-primary,
+.button-ghost {
+  --button-line: var(--color-line);
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  clip-path: polygon(
+    var(--chamfer) 0,
+    100% 0,
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    0 100%,
+    0 var(--chamfer)
+  );
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    transform 160ms var(--ease-ui),
+    background-color 160ms var(--ease-ui);
+}
+
+.button-primary {
+  background: var(--color-ink);
+  color: var(--color-ground);
+}
+
+.button-ghost {
+  background: var(--button-line);
+  color: var(--color-ink);
+  transition:
+    transform 160ms var(--ease-ui),
+    background-color 160ms var(--ease-ui);
+}
+
+.button-ghost::before {
+  position: absolute;
+  inset: 1px;
+  background: var(--color-ground);
+  clip-path: polygon(
+    calc(var(--chamfer) - 1px) 0,
+    100% 0,
+    100% calc(100% - (var(--chamfer) - 1px)),
+    calc(100% - (var(--chamfer) - 1px)) 100%,
+    0 100%,
+    0 calc(var(--chamfer) - 1px)
+  );
+  content: '';
+}
+
+.button-primary > span,
+.button-ghost > span {
+  position: relative;
+  z-index: 1;
+  padding: 14px 24px;
+}
+
+.button-primary:hover {
+  background: oklch(0.98 0.01 100);
+  transform: translateY(-1px);
+}
+
+.button-ghost:hover {
+  --button-line: var(--color-ink);
+  transform: translateY(-1px);
+}
+
+.button-primary:active,
+.button-ghost:active {
+  transform: translateY(0);
+}
+
+.button-primary:focus-visible,
+.button-ghost:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.readout-panel {
+  position: relative;
+  background: var(--color-line);
+  clip-path: polygon(
+    var(--chamfer) 0,
+    100% 0,
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    0 100%,
+    0 var(--chamfer)
+  );
+}
+
+.readout-panel::before {
+  position: absolute;
+  inset: 1px;
+  background: var(--color-ground-raised);
+  clip-path: polygon(
+    calc(var(--chamfer) - 1px) 0,
+    100% 0,
+    100% calc(100% - (var(--chamfer) - 1px)),
+    calc(100% - (var(--chamfer) - 1px)) 100%,
+    0 100%,
+    0 calc(var(--chamfer) - 1px)
+  );
+  content: '';
+}
+
+.readout-panel > * {
+  position: relative;
+  z-index: 1;
+}
