@@ -1,0 +1,140 @@
+---
+import Mark from '../components/Mark.astro';
+import { site } from '../content/site';
+import Base from '../layouts/Base.astro';
+---
+
+<Base title={`${site.name} — ${site.description}`}>
+  <main class="foundation">
+    <div class="foundation__inner">
+      <header class="brand-lockup" aria-label={site.name}>
+        <Mark class="brand-lockup__mark" />
+        <span class="brand-lockup__wordmark">{site.name}</span>
+      </header>
+
+      <section class="foundation__content" aria-labelledby="foundation-heading">
+        <h1 id="foundation-heading">{site.description}</h1>
+        <p>{site.smoke.paragraph}</p>
+        <p class="readout">
+          <span>LOAD </span><span class="readout__value"
+            >{site.smoke.readout.load}</span
+          ><span> &nbsp;·&nbsp; {site.smoke.readout.status}</span>
+        </p>
+        <a class="button-ghost" href="mailto:hello@boomich.pt"
+          >{site.smoke.action}</a
+        >
+      </section>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .foundation {
+    display: grid;
+    min-height: 100svh;
+    padding: var(--gutter);
+  }
+
+  .foundation__inner {
+    display: grid;
+    width: min(100%, var(--maxw));
+    margin: auto;
+    border-block: var(--tick) solid var(--color-line-soft);
+  }
+
+  .brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    width: fit-content;
+    padding-block: 1.15rem;
+    color: var(--color-ink);
+  }
+
+  .brand-lockup__mark {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+
+  .brand-lockup__wordmark {
+    font-family: var(--font-display);
+    font-size: 1.42rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .foundation__content {
+    display: grid;
+    justify-items: start;
+    padding-block: clamp(72px, 14vw, 172px);
+  }
+
+  h1,
+  p {
+    margin: 0;
+  }
+
+  h1 {
+    max-width: 13ch;
+    font-family: var(--font-display);
+    font-size: var(--type-display-size);
+    font-weight: var(--type-display-weight);
+    letter-spacing: var(--type-display-tracking);
+    line-height: var(--type-display-leading);
+  }
+
+  .foundation__content > p:not(.readout) {
+    max-width: 39rem;
+    margin-top: 1.75rem;
+    color: var(--color-ink-secondary);
+  }
+
+  .readout {
+    margin-top: 2.5rem;
+    color: var(--color-ink-secondary);
+    font-family: var(--font-readout);
+    font-size: var(--type-readout-size);
+    font-weight: var(--type-readout-weight);
+    letter-spacing: var(--type-readout-tracking);
+    line-height: 1.5;
+  }
+
+  .readout__value {
+    color: var(--color-amber);
+  }
+
+  .button-ghost {
+    margin-top: 2rem;
+    padding: 14px 24px;
+    border: 1px solid var(--color-line);
+    clip-path: polygon(
+      var(--chamfer) 0,
+      100% 0,
+      100% calc(100% - var(--chamfer)),
+      calc(100% - var(--chamfer)) 100%,
+      0 100%,
+      0 var(--chamfer)
+    );
+    color: var(--color-ink);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: border-color 160ms var(--ease-ui);
+  }
+
+  .button-ghost:hover {
+    border-color: var(--color-ink);
+  }
+
+  @media (max-width: 480px) {
+    .foundation {
+      padding: 20px;
+    }
+
+    .foundation__content {
+      padding-block: 88px;
+    }
+  }
+</style>

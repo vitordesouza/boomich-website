@@ -1,0 +1,37 @@
+:root {
+  --color-ground: oklch(0.24 0.03 130);
+  --color-ground-raised: oklch(0.285 0.036 128);
+  --color-ground-recessed: oklch(0.205 0.026 131);
+  --color-ink: oklch(0.95 0.01 100);
+  --color-ink-secondary: oklch(0.77 0.018 115);
+  --color-ink-faint: oklch(0.63 0.02 120);
+  --color-amber: oklch(0.82 0.14 76);
+  --color-amber-deep: oklch(0.72 0.15 70);
+  --color-line: oklch(0.95 0.01 100 / 0.16);
+  --color-line-soft: oklch(0.95 0.01 100 / 0.08);
+
+  --font-display: 'Panchang', system-ui, sans-serif;
+  --font-body: 'Switzer', system-ui, sans-serif;
+  --font-readout: 'Martian Mono', ui-monospace, monospace;
+  --type-display-size: clamp(2.5rem, 6.5vw, 5.25rem);
+  --type-display-weight: 600;
+  --type-display-leading: 1.03;
+  --type-display-tracking: -0.015em;
+  --type-headline-size: clamp(1.55rem, 3.2vw, 2.5rem);
+  --type-headline-weight: 600;
+  --type-headline-leading: 1.12;
+  --type-headline-tracking: -0.01em;
+  --type-body-size: clamp(16px, calc(15px + 0.3vw), 19px);
+  --type-body-weight: 400;
+  --type-body-leading: 1.6;
+  --type-readout-size: 12.5px;
+  --type-readout-weight: 450;
+  --type-readout-tracking: 0.05em;
+
+  --chamfer: 7px;
+  --tick: 1px;
+  --gutter: clamp(20px, 5vw, 64px);
+  --section: clamp(88px, 12vw, 176px);
+  --maxw: 1180px;
+  --ease-ui: cubic-bezier(0.16, 1, 0.3, 1);
+}

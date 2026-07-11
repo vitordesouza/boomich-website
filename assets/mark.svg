@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Boomich mark">
+  <!-- The Truss B: a load-bearing letterform. Stem 8.0, diagonals 8.6 (optical), joint at 48.5 (optical center). -->
+  <g fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M24 6 V94" stroke-width="8"/>
+    <path d="M24 11 L78 29.5 L24 48.5 L78 70.5 L24 89" stroke-width="8.6"/>
+  </g>
+</svg>

@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Boomich">
+  <rect width="100" height="100" rx="20" fill="oklch(0.24 0.030 130)"/>
+  <g transform="translate(10 10) scale(.8)" fill="none" stroke="oklch(0.95 0.010 100)" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M24 6 V94" stroke-width="13"/>
+    <path d="M24 12.5 L78 29.5 L24 48.5 L78 70.5 L24 87.5" stroke-width="13.5"/>
+  </g>
+</svg>

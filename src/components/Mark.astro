@@ -1,0 +1,30 @@
+---
+interface Props {
+  small?: boolean;
+  class?: string;
+}
+
+const { small = false, class: className } = Astro.props;
+const strokeWidth = small ? { mast: 13, truss: 13.5 } : { mast: 8, truss: 8.6 };
+const endpoints = small ? { top: 12.5, bottom: 87.5 } : { top: 11, bottom: 89 };
+---
+
+<svg
+  class={className}
+  viewBox="0 0 100 100"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+  focusable="false"
+>
+  <g
+    fill="none"
+    stroke="currentColor"
+    stroke-linecap="butt"
+    stroke-linejoin="miter"
+  >
+    <path d="M24 6 V94" stroke-width={strokeWidth.mast}></path>
+    <path
+      d={`M24 ${endpoints.top} L78 29.5 L24 48.5 L78 70.5 L24 ${endpoints.bottom}`}
+      stroke-width={strokeWidth.truss}></path>
+  </g>
+</svg>
