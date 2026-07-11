@@ -1,8 +1,8 @@
 import { HOOK_INDEX, MEMBER_COUNT, type TrussState, strain } from './physics';
 
-const LOGICAL_WIDTH = 460;
-const LOGICAL_HEIGHT = 220;
-const ZERO_STRAIN = 'oklch(0.95 0.01 100 / 0.55)';
+const FIT_WIDTH = 440;
+const FIT_HEIGHT = 200;
+const ZERO_STRAIN = 'oklch(0.95 0.01 100 / 0.7)';
 const STRESS_COLORS = [
   ZERO_STRAIN,
   'oklch(0.935 0.023 98 / 0.59)',
@@ -21,6 +21,7 @@ export interface InstrumentRenderer {
   fit(): void;
   render(state: TrussState, hoverStrength: number): void;
   getPoint(clientX: number, clientY: number): { x: number; y: number };
+  getClientPoint(x: number, y: number): { x: number; y: number };
 }
 
 function pointIndex(node: number): number {
@@ -47,9 +48,9 @@ export function createRenderer(canvas: HTMLCanvasElement): InstrumentRenderer {
     canvas.style.width = `${cssWidth}px`;
     canvas.style.height = `${cssHeight}px`;
     context.setTransform(dpr, 0, 0, dpr, 0, 0);
-    scale = Math.min(cssWidth / LOGICAL_WIDTH, cssHeight / LOGICAL_HEIGHT);
-    offsetX = (cssWidth - LOGICAL_WIDTH * scale) * 0.5;
-    offsetY = (cssHeight - LOGICAL_HEIGHT * scale) * 0.5;
+    scale = Math.min(cssWidth / FIT_WIDTH, cssHeight / FIT_HEIGHT);
+    offsetX = (cssWidth - FIT_WIDTH * scale) * 0.5;
+    offsetY = (cssHeight - FIT_HEIGHT * scale) * 0.5;
   };
 
   const drawAnchor = (x: number, y: number): void => {
@@ -85,7 +86,7 @@ export function createRenderer(canvas: HTMLCanvasElement): InstrumentRenderer {
       const end = pointIndex(state.memberEnd[member]);
       const amount = Math.min(Math.abs(strain(state, member)) / 0.12, 1);
       context.strokeStyle = STRESS_COLORS[Math.round(amount * 10)];
-      context.lineWidth = 1.25 + (strain(state, member) < 0 ? 0.5 : 0);
+      context.lineWidth = 1.45 + (strain(state, member) < 0 ? 0.5 : 0);
       context.beginPath();
       context.moveTo(state.positions[start], state.positions[start + 1]);
       context.lineTo(state.positions[end], state.positions[end + 1]);
@@ -98,23 +99,35 @@ export function createRenderer(canvas: HTMLCanvasElement): InstrumentRenderer {
     for (let node = 0; node < HOOK_INDEX; node += 1) {
       const point = pointIndex(node);
       context.fillRect(
-        state.positions[point] - 1.5,
-        state.positions[point + 1] - 1.5,
-        3,
-        3,
+        state.positions[point] - 1.75,
+        state.positions[point + 1] - 1.75,
+        3.5,
+        3.5,
       );
     }
 
     const hook = pointIndex(HOOK_INDEX);
     context.fillStyle = 'oklch(0.95 0.01 100)';
     context.fillRect(
-      state.positions[hook] - 2.5,
-      state.positions[hook + 1] - 2.5,
-      5,
-      5,
+      state.positions[hook] - 3.5,
+      state.positions[hook + 1] - 3.5,
+      7,
+      7,
     );
+    context.globalAlpha = 0.32 + hoverStrength * 0.6;
+    context.strokeStyle = 'oklch(0.95 0.01 100 / 0.55)';
+    context.lineWidth = 1;
+    context.beginPath();
+    context.arc(
+      state.positions[hook],
+      state.positions[hook + 1],
+      10 + hoverStrength * 4,
+      0,
+      Math.PI * 2,
+    );
+    context.stroke();
     if (hoverStrength > 0.01) {
-      context.globalAlpha = hoverStrength;
+      context.globalAlpha = hoverStrength * 0.5;
       context.strokeStyle = 'oklch(0.95 0.01 100 / 0.55)';
       context.lineWidth = 1;
       context.beginPath();
@@ -138,6 +151,13 @@ export function createRenderer(canvas: HTMLCanvasElement): InstrumentRenderer {
       return {
         x: (clientX - rect.left - offsetX) / scale,
         y: (clientY - rect.top - offsetY) / scale,
+      };
+    },
+    getClientPoint(x: number, y: number) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: rect.left + offsetX + x * scale,
+        y: rect.top + offsetY + y * scale,
       };
     },
   };

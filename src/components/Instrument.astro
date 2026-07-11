@@ -71,12 +71,23 @@ import { site } from '../content/site';
   <p class="instrument__caption">{site.hero.instrumentCaption}</p>
   <div
     class="readout-panel instrument__readout"
+    data-instrument-readout
     aria-label="Test article readout"
   >
     <p aria-hidden="true">
-      LOAD <span data-readout-load>0.0</span> kN · DEFLECTION <span
-        data-readout-deflection>0.0</span
-      > mm · <span data-readout-status>WITHIN TOLERANCE</span>
+      <span class="instrument__field"
+        >LOAD <span class="instrument__value"
+          ><span data-readout-load>0.0</span> kN</span
+        ></span
+      >
+      <span class="instrument__field"
+        >DEFLECTION <span class="instrument__value"
+          ><span data-readout-deflection>0.0</span> mm</span
+        ></span
+      >
+      <span class="instrument__field"
+        ><span data-readout-status>WITHIN TOLERANCE</span></span
+      >
     </p>
     <span class="visually-hidden" aria-live="polite" data-readout-live
       >LOAD 0.0 kN · DEFLECTION 0.0 mm · WITHIN TOLERANCE</span
@@ -101,7 +112,7 @@ import { site } from '../content/site';
 
   .instrument__bed {
     position: relative;
-    min-height: 312px;
+    aspect-ratio: 2 / 1;
     overflow: hidden;
     background: var(--color-ground-raised);
   }
@@ -111,7 +122,6 @@ import { site } from '../content/site';
     display: block;
     width: 100%;
     height: 100%;
-    min-height: 312px;
   }
 
   .instrument__canvas {
@@ -124,14 +134,15 @@ import { site } from '../content/site';
 
   .instrument__hook-control {
     position: absolute;
-    top: calc(46.4% - 44px);
-    left: calc(84.8% - 44px);
+    top: calc(50% - 44px);
+    left: calc(88% - 44px);
     width: 88px;
     height: 88px;
     margin: 0;
     border: 0;
     background: transparent;
     cursor: grab;
+    pointer-events: none;
   }
 
   .instrument__hook-control:active {
@@ -145,14 +156,17 @@ import { site } from '../content/site';
   }
 
   .instrument__readout {
-    width: fit-content;
-    max-width: 100%;
-    margin: 0.7rem 0 0 auto;
+    width: 100%;
+    margin: 0.7rem 0 0;
   }
 
   .instrument__readout p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.35rem 1.5rem;
     margin: 0;
-    padding: 0.95rem 1rem;
+    padding: 0.95rem 1.1rem;
     color: var(--color-ink-secondary);
     font-family: var(--font-readout);
     font-size: var(--type-readout-size);
@@ -160,12 +174,22 @@ import { site } from '../content/site';
     font-weight: var(--type-readout-weight);
     letter-spacing: var(--type-readout-tracking);
     line-height: 1.5;
+  }
+
+  .instrument__field {
     white-space: nowrap;
   }
 
-  .instrument__readout [data-readout-load],
-  .instrument__readout [data-readout-deflection],
+  .instrument__value {
+    color: var(--color-amber);
+  }
+
   .instrument__readout [data-readout-status] {
+    color: var(--color-ink-secondary);
+  }
+
+  .instrument__readout[data-readout-state='approaching'] [data-readout-status],
+  .instrument__readout[data-readout-state='rated'] [data-readout-status] {
     color: var(--color-amber);
   }
 
@@ -184,17 +208,11 @@ import { site } from '../content/site';
     .instrument__bed,
     .instrument__canvas,
     .instrument__fallback {
-      min-height: min(58vw, 380px);
-    }
-
-    .instrument__readout {
-      width: 100%;
-      margin-inline: 0;
+      min-height: 0;
     }
 
     .instrument__readout p {
-      overflow-x: auto;
-      white-space: nowrap;
+      padding: 0.85rem clamp(0.7rem, 3vw, 1rem);
     }
   }
 </style>

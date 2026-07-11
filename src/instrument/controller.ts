@@ -33,7 +33,18 @@ export function mountInstrument(container: HTMLElement): () => void {
   );
   const status = container.querySelector<HTMLElement>('[data-readout-status]');
   const live = container.querySelector<HTMLElement>('[data-readout-live]');
-  if (!canvas || !hookButton || !load || !deflection || !status || !live)
+  const readoutPanel = container.querySelector<HTMLElement>(
+    '[data-instrument-readout]',
+  );
+  if (
+    !canvas ||
+    !hookButton ||
+    !load ||
+    !deflection ||
+    !status ||
+    !live ||
+    !readoutPanel
+  )
     return () => undefined;
 
   const state = createTruss();
@@ -54,7 +65,7 @@ export function mountInstrument(container: HTMLElement): () => void {
   let hoverStrength = 0;
   let hookHovered = false;
   let lastLiveUpdate = 0;
-  let lastInteraction = performance.now();
+  let lastInteraction = performance.now() - 4001;
   let resizeTimer = 0;
 
   const updateReadout = (now: number): void => {
@@ -62,6 +73,12 @@ export function mountInstrument(container: HTMLElement): () => void {
     load.textContent = renderedNumber(values.load);
     deflection.textContent = renderedNumber(values.deflection);
     status.textContent = values.status;
+    readoutPanel.dataset.readoutState =
+      values.status === 'WITHIN TOLERANCE'
+        ? 'within'
+        : values.status === 'APPROACHING LIMIT'
+          ? 'approaching'
+          : 'rated';
     if (now - lastLiveUpdate >= 1200) {
       live.textContent = `LOAD ${renderedNumber(values.load)} kN · DEFLECTION ${renderedNumber(values.deflection)} mm · ${values.status}`;
       lastLiveUpdate = now;
@@ -118,6 +135,16 @@ export function mountInstrument(container: HTMLElement): () => void {
   const hookPoint = (): { x: number; y: number } => {
     const point = HOOK_INDEX * 2;
     return { x: state.positions[point], y: state.positions[point + 1] };
+  };
+  const positionHookControl = (): void => {
+    const hook = HOOK_INDEX * 2;
+    const point = renderer.getClientPoint(
+      state.restPositions[hook],
+      state.restPositions[hook + 1],
+    );
+    const bed = canvas.getBoundingClientRect();
+    hookButton.style.left = `${point.x - bed.left - 44}px`;
+    hookButton.style.top = `${point.y - bed.top - 44}px`;
   };
   const pointerTarget = (event: PointerEvent): void => {
     const point = renderer.getPoint(event.clientX, event.clientY);
@@ -189,6 +216,7 @@ export function mountInstrument(container: HTMLElement): () => void {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       renderer.fit();
+      positionHookControl();
       if (reduceMotion) renderStatic();
     }, 80);
   });
@@ -204,6 +232,7 @@ export function mountInstrument(container: HTMLElement): () => void {
   resizeObserver.observe(container);
   document.addEventListener('visibilitychange', onVisibilityChange);
   renderer.fit();
+  positionHookControl();
   if (reduceMotion) renderStatic();
   else beginLoop();
 

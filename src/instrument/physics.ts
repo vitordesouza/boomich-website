@@ -173,7 +173,7 @@ export function step(state: TrussState, dt: number): void {
   if (!state.dragging && state.idling) {
     state.idleTime += boundedDt;
     state.targetX = restX;
-    state.targetY = restY + Math.sin((state.idleTime / 7) * Math.PI * 2) * 2.5;
+    state.targetY = restY + Math.sin((state.idleTime / 7) * Math.PI * 2) * 4.5;
   } else if (!state.dragging) {
     state.targetX = restX;
     state.targetY = restY;
