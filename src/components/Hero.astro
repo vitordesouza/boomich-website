@@ -1,43 +1,180 @@
 ---
 import { site } from '../content/site';
-import Instrument from './Instrument.astro';
+
+const fallbackColumns = 12;
+const fallbackRows = 8;
+const fallbackWidth = 1_000;
+const fallbackHeight = 720;
+const fallbackInset = 34;
+const fallbackTop = 48;
+const fallbackBottom = fallbackHeight - fallbackTop;
+const fallbackNodes = Array.from(
+  { length: fallbackColumns * fallbackRows },
+  (_, node) => {
+    const row = Math.floor(node / fallbackColumns);
+    const column = node % fallbackColumns;
+    return {
+      x:
+        fallbackInset +
+        ((fallbackWidth - fallbackInset * 2) * column) / (fallbackColumns - 1),
+      y:
+        fallbackTop +
+        ((fallbackBottom - fallbackTop) * row) / (fallbackRows - 1),
+    };
+  },
+);
+const fallbackMembers: Array<[number, number]> = [];
+for (let row = 0; row < fallbackRows; row += 1) {
+  for (let column = 0; column < fallbackColumns; column += 1) {
+    const node = row * fallbackColumns + column;
+    if (column + 1 < fallbackColumns) fallbackMembers.push([node, node + 1]);
+    if (row + 1 < fallbackRows) {
+      fallbackMembers.push([node, node + fallbackColumns]);
+      if (column + 1 < fallbackColumns) {
+        fallbackMembers.push(
+          column % 2 === 0
+            ? [node, node + fallbackColumns + 1]
+            : [node + 1, node + fallbackColumns],
+        );
+      }
+    }
+  }
+}
+const fallbackTieTargets = [
+  { x: 585, y: 344 },
+  { x: 715, y: 344 },
+  { x: 845, y: 344 },
+];
+const fallbackTieNodes = fallbackTieTargets.map((target) => {
+  let nearest = 0;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+  for (let node = 0; node < fallbackNodes.length; node += 1) {
+    const dx = fallbackNodes[node].x - target.x;
+    const dy = fallbackNodes[node].y - (target.y - 90);
+    const distance = dx * dx + dy * dy;
+    if (distance < nearestDistance) {
+      nearest = node;
+      nearestDistance = distance;
+    }
+  }
+  return nearest;
+});
 ---
 
-<section class="hero" aria-labelledby="hero-heading">
-  <div class="hero__inner">
-    <div class="hero__copy">
-      <h1 id="hero-heading">{site.hero.title}</h1>
-      <p class="hero__summary">{site.hero.summary}</p>
-      <div class="hero__actions">
-        <a class="button-primary" href={site.hero.primaryCta.href}
-          ><span>{site.hero.primaryCta.label}</span></a
-        >
-        <a class="button-ghost" href={site.hero.secondaryCta.href}
-          ><span>{site.hero.secondaryCta.label}</span></a
-        >
-      </div>
+<section class="hero" data-net-hero aria-labelledby="hero-heading">
+  <canvas
+    class="hero__canvas"
+    data-net-canvas
+    role="img"
+    aria-label="The Net: an interactive structural lattice that deforms under load and recovers."
+  ></canvas>
+  <noscript>
+    <svg
+      class="hero__fallback"
+      viewBox={`0 0 ${fallbackWidth} ${fallbackHeight}`}
+      preserveAspectRatio="xMidYMid slice"
+      role="img"
+      aria-label="The Net: a static structural lattice holding the hero message."
+    >
+      <g fill="none" stroke="oklch(0.95 0.01 100 / 0.3)" stroke-width="1">
+        {
+          fallbackMembers.map(([start, end]) => (
+            <line
+              x1={fallbackNodes[start].x}
+              y1={fallbackNodes[start].y}
+              x2={fallbackNodes[end].x}
+              y2={fallbackNodes[end].y}
+            />
+          ))
+        }
+      </g>
+      <g fill="none" stroke="oklch(0.95 0.01 100 / 0.5)" stroke-width="1.25">
+        {
+          fallbackTieTargets.map((target, tie) => (
+            <line
+              x1={fallbackNodes[fallbackTieNodes[tie]].x}
+              y1={fallbackNodes[fallbackTieNodes[tie]].y}
+              x2={target.x}
+              y2={target.y}
+            />
+          ))
+        }
+      </g>
+      <g fill="oklch(0.95 0.01 100 / 0.58)">
+        {
+          fallbackNodes.map((node) => (
+            <rect x={node.x - 1} y={node.y - 1} width="2" height="2" />
+          ))
+        }
+      </g>
+    </svg>
+  </noscript>
+  <div class="hero__content" data-net-copy>
+    <h1 id="hero-heading">{site.hero.title}</h1>
+    <p class="hero__summary">{site.hero.summary}</p>
+    <div class="hero__actions">
+      <a class="button-primary" href={site.hero.primaryCta.href}
+        ><span>{site.hero.primaryCta.label}</span></a
+      >
+      <a class="button-ghost" href={site.hero.secondaryCta.href}
+        ><span>{site.hero.secondaryCta.label}</span></a
+      >
     </div>
-    <Instrument />
+    <p class="hero__status" data-net-status>
+      {site.hero.restingStatus}
+    </p>
+    <span
+      class="visually-hidden"
+      data-net-status-live
+      aria-live="polite"
+      role="status"></span>
+    <button class="hero__load-control" data-net-load type="button">
+      {site.hero.loadControlLabel}
+    </button>
   </div>
 </section>
 
+<script>
+  import { mountNet } from '../instrument/controller';
+
+  document.querySelectorAll<HTMLElement>('[data-net-hero]').forEach((hero) => {
+    mountNet(hero);
+  });
+</script>
+
 <style>
   .hero {
-    padding: clamp(50px, 7vw, 92px) var(--gutter) clamp(56px, 7vw, 88px);
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    min-height: 100svh;
+    overflow: clip;
+    touch-action: pan-y;
   }
 
-  .hero__inner {
-    display: grid;
-    width: min(100%, var(--maxw));
+  .hero__canvas,
+  .hero__fallback {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__canvas {
+    touch-action: pan-y;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+    width: min(100% - (var(--gutter) * 2), var(--maxw));
     margin: 0 auto;
-    gap: clamp(3rem, 7vw, 7rem);
-  }
-
-  .hero__copy {
-    min-width: 0;
-    display: grid;
-    align-content: center;
-    justify-items: start;
+    padding: clamp(7.5rem, 18svh, 12rem) 0 clamp(4rem, 10svh, 7rem);
+    pointer-events: auto;
+    will-change: transform;
   }
 
   h1,
@@ -69,17 +206,58 @@ import Instrument from './Instrument.astro';
     margin-top: 2rem;
   }
 
-  @media (min-width: 980px) {
-    .hero {
-      min-height: min(760px, calc(100svh - 72px));
-      display: grid;
-      align-items: center;
-    }
+  .hero__status {
+    min-height: 1.5em;
+    margin-top: 1rem;
+    color: var(--color-ink-faint);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    transition: opacity 180ms var(--ease-ui);
+  }
 
-    .hero__inner {
-      grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
-      align-items: center;
-      gap: clamp(2rem, 3.5vw, 3.5rem);
+  .hero__load-control {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .hero__load-control:focus-visible {
+    position: static;
+    width: auto;
+    height: auto;
+    margin-top: 1rem;
+    padding: 0.6rem 0.8rem;
+    overflow: visible;
+    clip: auto;
+    background: var(--color-ground-raised);
+    color: var(--color-ink);
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .hero.is-dragging,
+  .hero.is-dragging * {
+    user-select: none;
+  }
+
+  @media (min-width: 760px) {
+    .hero__content {
+      margin-left: max(var(--gutter), calc((100vw - var(--maxw)) / 2));
+      margin-right: auto;
+    }
+  }
+
+  @media (max-width: 759px) {
+    .hero__content {
+      align-self: end;
+      padding-top: 8rem;
+      padding-bottom: clamp(4rem, 11svh, 6.5rem);
     }
   }
 
@@ -90,6 +268,13 @@ import Instrument from './Instrument.astro';
 
     .hero__actions > a {
       width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__content {
+      transform: none !important;
+      will-change: auto;
     }
   }
 </style>

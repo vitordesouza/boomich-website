@@ -22,7 +22,7 @@ Success: a qualified visitor reads the page, believes this is senior engineering
 
 Visual world: metrology and structural-test equipment. Load cells, strain gauges, calibration plates, test fixtures. Precision instruments, not construction machinery. Never hazard stripes, stencil type, rivets, blueprints, cranes, or industrial decor. The reference is the quiet lab where things are measured, not the loud site where things are welded.
 
-The one image is a working instrument: an interactive truss the visitor can load, with a live readout. The site behaves like a calibrated device: markings correspond to real values, state is exposed, limits are defined.
+The one image is a working instrument: an interactive full-bleed lattice that the visitor can load and watch recover while holding the hero message. The site behaves like a calibrated device: state is exposed and the structure visibly carries the load.
 
 ## Brand Personality
 

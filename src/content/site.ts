@@ -16,7 +16,8 @@ export const site = {
       'Realtime product systems, cross-platform mobile, applied AI. For teams carrying complexity they cannot ship around.',
     primaryCta: { label: "Tell us what you're building", href: '#contact' },
     secondaryCta: { label: 'What we build', href: '#capabilities' },
-    instrumentCaption: 'Cantilever test article. Drag the load hook.',
+    restingStatus: 'Push anywhere. It holds.',
+    loadControlLabel: 'Load the structure',
   },
   capabilities: {
     heading: 'What we build',

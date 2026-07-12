@@ -21,18 +21,9 @@ test('site loads, interactive controls work, and meets accessibility checks', as
       name: 'Senior engineering for the hard parts.',
     }),
   ).toBeVisible();
-  await expect(
-    page.getByRole('img', { name: /interactive structural test/i }),
-  ).toBeVisible();
-  await expect(page.locator('[data-readout-load]')).toHaveText(/^\d+\.\d$/);
-  await expect(page.locator('[data-readout-deflection]')).toHaveText(
-    /^\d+\.\d$/,
-  );
-  await expect(page.locator('[data-readout-status]')).toHaveText(
-    /^(WITHIN TOLERANCE|APPROACHING LIMIT|AT RATED LIMIT)$/,
-  );
-  await expect(page.locator('[data-readout-live]')).toHaveText(
-    /LOAD \d+\.\d kN · DEFLECTION \d+\.\d mm · (WITHIN TOLERANCE|APPROACHING LIMIT|AT RATED LIMIT)/,
+  await expect(page.getByRole('img', { name: /the net/i })).toBeVisible();
+  await expect(page.locator('[data-net-status]')).toHaveText(
+    'Push anywhere. It holds.',
   );
 
   await expect(
@@ -68,33 +59,43 @@ test('site loads, interactive controls work, and meets accessibility checks', as
     .poll(() => page.evaluate(() => navigator.clipboard.readText()))
     .toBe('joaovitor@boomich.pt');
 
-  const hook = page.locator('[data-instrument-hook]');
-  await hook.scrollIntoViewIfNeeded();
-  await expect(hook).toBeVisible();
-  const hookBox = await hook.boundingBox();
-  if (!hookBox) throw new Error('Instrument hook control has no bounding box.');
-  const startX = hookBox.x + hookBox.width / 2;
-  const startY = hookBox.y + hookBox.height / 2;
-  await page.mouse.move(startX, startY);
+  const hero = page.locator('[data-net-hero]');
+  // Earlier steps scrolled to the contact section; the hero's observer
+  // pauses the simulation offscreen. Return and let it resume.
+  await hero.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(400);
+  const heroBox = await hero.boundingBox();
+  if (!heroBox) throw new Error('Hero has no bounding box.');
+  const startX = heroBox.x + heroBox.width * 0.5;
+  const startY = heroBox.y + heroBox.height * 0.44;
+  await page.mouse.move(startX - 80, startY);
   await page.mouse.down();
-  await page.mouse.move(startX, startY + 120, { steps: 12 });
-  await expect
-    .poll(async () =>
-      Number.parseFloat(
-        (await page.locator('[data-readout-load]').textContent()) ?? '0',
-      ),
-    )
-    .toBeGreaterThan(1);
+  // The status flips only while energy is high and reverts 2.5s after calm,
+  // so keep the net under sustained load and observe the flip mid-drag.
+  let sawHolding = false;
+  for (let i = 1; i <= 40 && !sawHolding; i += 1) {
+    await page.mouse.move(
+      startX + Math.sin(i / 2) * 170,
+      startY + (i % 20) * 12,
+      { steps: 2 },
+    );
+    await page.waitForTimeout(16);
+    sawHolding =
+      (await page.locator('[data-net-status]').textContent())?.trim() ===
+      'Still holding.';
+  }
+  expect(sawHolding).toBe(true);
   await page.mouse.up();
-  await expect
-    .poll(
-      async () =>
-        Number.parseFloat(
-          (await page.locator('[data-readout-load]').textContent()) ?? '99',
-        ),
-      { timeout: 3500 },
-    )
-    .toBeLessThan(0.3);
+  await expect(page.locator('[data-net-status]')).toHaveText(
+    'Push anywhere. It holds.',
+    { timeout: 8_000 },
+  );
+
+  const loadControl = page.getByRole('button', { name: 'Load the structure' });
+  await loadControl.focus();
+  await expect(loadControl).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('[data-net-status]')).toHaveText('Still holding.');
 
   const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
   expect(accessibilityScanResults.violations).toEqual([]);

@@ -63,7 +63,7 @@ components:
 
 **Creative North Star: "The Calibrated Instrument"**
 
-The site is a precision instrument in a deep mineral-olive housing. Everything on it behaves like the front panel of well-made test equipment: engraved hairlines, machined chamfers, markings that correspond to real values, one amber signal that only ever means "live measurement". The hero is a working structural instrument: a truss the visitor loads with their finger, read out in real units, held within a rated envelope.
+The site is a precision instrument in a deep mineral-olive housing. Everything on it behaves like the front panel of well-made test equipment: engraved hairlines, machined chamfers, markings that correspond to real values, one amber signal that only ever means "live measurement". The hero is a working structural instrument: a full-bleed lattice the visitor loads with their finger. It visibly deforms, settles, and holds the suspended message.
 
 Explicitly rejected: the AI-default dev-portfolio formula (dark hero, heavy grotesque, red accent, mono eyebrows, numbered sections, warm paper), the editorial-serif lane, terminal cosplay, construction decor, shadows, gradients, glassmorphism, cards, stock photography. See PRODUCT.md anti-references.
 
@@ -97,7 +97,7 @@ Explicitly rejected: the AI-default dev-portfolio formula (dark hero, heavy grot
 
 ### Named Rules
 
-**The Calibration Rule.** Amber appears only where something is being measured or is changing state: stressed truss members, live readout values, the status word, an in-flight form submission. If it is static decoration, it cannot be amber. There is no other accent color, ever.
+**The Calibration Rule.** Amber appears only where something is being measured or is changing state: strained net members, live readout values, active states of the instrument, an in-flight form submission. If it is static decoration, it cannot be amber. There is no other accent color, ever.
 
 **The One Environment Rule.** No section leaves the olive housing. No white sections, no paper, no cream. Spatial contrast comes from Raised and Recessed tones plus engraved lines.
 
@@ -132,13 +132,14 @@ Favicon: mark-small, ink on ground, in SVG + 32px PNG.
 
 ## 6. The Hero Instrument (signature component)
 
-A 2D truss (14 to 18 members, cantilever anchored at the left wall on desktop, reoriented for portrait) rendered on canvas in brand style: 1.25px ink members, square joint nodes, chamfered anchor plates.
+**The Net** is a full-bleed, fully braced lattice rendered behind the hero copy. Its perimeter is pinned; three tie members connect nearby lattice nodes to the top edge of the copy block. The copy follows the mean tie displacement by a restrained amount, so the message looks suspended rather than overlaid. Members are 1px Ink, nodes are square, and ties are 1.25px Ink.
 
-- Physics: verlet integration + distance constraints (4 iterations/frame), fixed anchors, damping 0.985. Dependency-free TypeScript, unit-tested.
-- Interaction: pointer/touch drag on the load hook (generous 44px hit area). Members shift toward amber with |strain|. Release: structure settles with visible damped oscillation.
-- Readout (Martian Mono, live region, throttled): `LOAD 0.0 kN · DEFLECTION 0.0 mm · WITHIN TOLERANCE`. Past 70% envelope: `APPROACHING LIMIT` (amber). At clamp: `AT RATED LIMIT`. It never breaks: displacement is clamped to the envelope. The instrument's honesty is the pitch: defined limits, visible state.
-- Idle: barely-perceptible ambient load cycle (long period, small amplitude) so the structure reads as alive. Off under reduced motion; artifact renders the solved static state instead, readout shows resting values.
-- Performance: DPR-aware canvas, rAF paused when offscreen or tab hidden, zero allocations in the frame loop, 60fps on a mid-range phone.
+- Physics: dependency-free verlet integration with one distance-constraint pass per frame, fixed perimeter supports, damping 0.985, and a bounded local displacement. It is deliberately compliant: the net must visibly deform before it recovers. Pure TypeScript physics is unit-tested.
+- Interaction: pointer hover applies a local 30% field; a mouse drag, horizontal touch movement, or touch hold applies 100%. A vertical touch scroll still receives the 30% passing field and must keep normal page scrolling. The radius is 200px. The field couples pointer velocity at 1.2 and pulls position at 0.16.
+- Status line: Switzer small in Ink Faint, directly below the CTAs. It says `Push anywhere. It holds.` (or `Press anywhere. It holds.` on touch devices), then crossfades to `Still holding.` while the net carries meaningful energy. It is the polite, throttled accessible state announcement; wording and crossfade communicate state, never amber.
+- Amber rule: amber is reserved for strained members only, ramping from the 0.3 Ink member base toward Amber by `strain / 0.07`. The status line, buttons, and static lattice never use amber.
+- Idle: a nearly imperceptible 0.05 wave keeps the unloaded net alive. Under reduced motion the settled net and ties render once, the copy does not translate, and no animation loop runs.
+- Performance: DPR is capped at 2; rAF pauses offscreen and when the tab is hidden; resize refits are debounced; the frame path allocates no simulation buffers. The first settled canvas frame is painted before fonts finish loading.
 
 ## 7. Components
 

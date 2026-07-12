@@ -8,14 +8,14 @@ Boomich is load-bearing: the member between product intent and production realit
 
 ## The instrument
 
-The hero is a dependency-free canvas truss.
+The hero is **The Net**, a dependency-free full-bleed canvas lattice suspended behind the headline.
 
-- Verlet integration advances each free node.
-- Distance constraints hold the member lengths across four iterations per frame.
-- Fixed anchors and a damped load hook define the test article.
-- The hook displacement is clamped to a rated envelope.
-- Strain and deflection drive the live readout and member state.
-- The render loop allocates nothing; its physics and clamp behavior have Vitest coverage.
+- Verlet integration advances each free node while its perimeter remains pinned.
+- A single distance-constraint pass deliberately keeps the net compliant and visibly deformable.
+- Hover applies a 30% local field; mouse drag, horizontal touch movement, and a touch hold apply full strength without taking over vertical scrolling.
+- Three tie members attach the copy to nearby nodes; the copy follows their mean displacement by a bounded, spring-smoothed amount.
+- Only strained members move from Ink toward calibration amber. The status line stays Ink Faint and provides the accessible state announcement.
+- The render loop uses fixed typed-array buffers; pure net geometry, stepping, strain, and energy have Vitest coverage.
 
 ## Architecture
 

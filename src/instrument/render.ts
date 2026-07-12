@@ -1,40 +1,32 @@
-import { HOOK_INDEX, MEMBER_COUNT, type TrussState, strain } from './physics';
+import { memberStrain, type NetState } from './net';
 
-const FIT_WIDTH = 440;
-const FIT_HEIGHT = 200;
-const ZERO_STRAIN = 'oklch(0.95 0.01 100 / 0.7)';
-const STRESS_COLORS = [
-  ZERO_STRAIN,
-  'oklch(0.935 0.023 98 / 0.59)',
-  'oklch(0.92 0.036 96 / 0.64)',
-  'oklch(0.905 0.049 94 / 0.68)',
-  'oklch(0.89 0.062 92 / 0.73)',
-  'oklch(0.875 0.075 90 / 0.78)',
-  'oklch(0.86 0.088 87 / 0.82)',
-  'oklch(0.85 0.101 84 / 0.87)',
-  'oklch(0.84 0.114 81 / 0.91)',
-  'oklch(0.83 0.127 78 / 0.96)',
-  'oklch(0.82 0.14 76)',
+const MEMBER_COLORS = [
+  'oklch(0.95 0.01 100 / 0.3)',
+  'oklch(0.937 0.023 97.6 / 0.355)',
+  'oklch(0.924 0.036 95.2 / 0.41)',
+  'oklch(0.911 0.049 92.8 / 0.465)',
+  'oklch(0.898 0.062 90.4 / 0.52)',
+  'oklch(0.885 0.075 88 / 0.575)',
+  'oklch(0.872 0.088 85.6 / 0.63)',
+  'oklch(0.859 0.101 83.2 / 0.685)',
+  'oklch(0.846 0.114 80.8 / 0.74)',
+  'oklch(0.833 0.127 78.4 / 0.795)',
+  'oklch(0.82 0.14 76 / 0.85)',
 ] as const;
 
-export interface InstrumentRenderer {
+const TIE_COLOR = 'oklch(0.95 0.01 100 / 0.5)';
+const NODE_COLOR = 'oklch(0.95 0.01 100 / 0.58)';
+
+export interface NetRenderer {
   fit(): void;
-  render(state: TrussState, hoverStrength: number): void;
-  getPoint(clientX: number, clientY: number): { x: number; y: number };
-  getClientPoint(x: number, y: number): { x: number; y: number };
+  width(): number;
+  height(): number;
+  render(state: NetState, tieNodes: Int16Array, tieTargets: Float32Array): void;
 }
 
-function pointIndex(node: number): number {
-  return node * 2;
-}
-
-export function createRenderer(canvas: HTMLCanvasElement): InstrumentRenderer {
+export function createNetRenderer(canvas: HTMLCanvasElement): NetRenderer {
   const context = canvas.getContext('2d');
-  if (!context)
-    throw new Error('Canvas 2D rendering is required for the test article.');
-  let scale = 1;
-  let offsetX = 0;
-  let offsetY = 0;
+  if (!context) throw new Error('Canvas 2D rendering is required for The Net.');
   let cssWidth = 1;
   let cssHeight = 1;
 
@@ -45,120 +37,48 @@ export function createRenderer(canvas: HTMLCanvasElement): InstrumentRenderer {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(cssWidth * dpr);
     canvas.height = Math.round(cssHeight * dpr);
-    canvas.style.width = `${cssWidth}px`;
-    canvas.style.height = `${cssHeight}px`;
     context.setTransform(dpr, 0, 0, dpr, 0, 0);
-    scale = Math.min(cssWidth / FIT_WIDTH, cssHeight / FIT_HEIGHT);
-    offsetX = (cssWidth - FIT_WIDTH * scale) * 0.5;
-    offsetY = (cssHeight - FIT_HEIGHT * scale) * 0.5;
-  };
-
-  const drawAnchor = (x: number, y: number): void => {
-    const plateWidth = 16;
-    const plateHeight = 12;
-    context.fillStyle = 'oklch(0.95 0.01 100 / 0.55)';
-    context.beginPath();
-    context.moveTo(x - plateWidth, y - plateHeight / 2);
-    context.lineTo(x - 3, y - plateHeight / 2);
-    context.lineTo(x, y - 3);
-    context.lineTo(x, y + 3);
-    context.lineTo(x - 3, y + plateHeight / 2);
-    context.lineTo(x - plateWidth, y + plateHeight / 2);
-    context.closePath();
-    context.fill();
-  };
-
-  const render = (state: TrussState, hoverStrength: number): void => {
-    context.clearRect(0, 0, cssWidth, cssHeight);
-    context.save();
-    context.translate(offsetX, offsetY);
-    context.scale(scale, scale);
-
-    context.strokeStyle = 'oklch(0.95 0.01 100 / 0.16)';
-    context.lineWidth = 1;
-    context.beginPath();
-    context.moveTo(29, 26);
-    context.lineTo(29, 190);
-    context.stroke();
-
-    for (let member = 0; member < MEMBER_COUNT; member += 1) {
-      const start = pointIndex(state.memberStart[member]);
-      const end = pointIndex(state.memberEnd[member]);
-      const amount = Math.min(Math.abs(strain(state, member)) / 0.12, 1);
-      context.strokeStyle = STRESS_COLORS[Math.round(amount * 10)];
-      context.lineWidth = 1.45 + (strain(state, member) < 0 ? 0.5 : 0);
-      context.beginPath();
-      context.moveTo(state.positions[start], state.positions[start + 1]);
-      context.lineTo(state.positions[end], state.positions[end + 1]);
-      context.stroke();
-    }
-
-    drawAnchor(state.positions[0], state.positions[1]);
-    drawAnchor(state.positions[10], state.positions[11]);
-    context.fillStyle = 'oklch(0.95 0.01 100 / 0.78)';
-    for (let node = 0; node < HOOK_INDEX; node += 1) {
-      const point = pointIndex(node);
-      context.fillRect(
-        state.positions[point] - 1.75,
-        state.positions[point + 1] - 1.75,
-        3.5,
-        3.5,
-      );
-    }
-
-    const hook = pointIndex(HOOK_INDEX);
-    context.fillStyle = 'oklch(0.95 0.01 100)';
-    context.fillRect(
-      state.positions[hook] - 3.5,
-      state.positions[hook + 1] - 3.5,
-      7,
-      7,
-    );
-    context.globalAlpha = 0.32 + hoverStrength * 0.6;
-    context.strokeStyle = 'oklch(0.95 0.01 100 / 0.55)';
-    context.lineWidth = 1;
-    context.beginPath();
-    context.arc(
-      state.positions[hook],
-      state.positions[hook + 1],
-      10 + hoverStrength * 4,
-      0,
-      Math.PI * 2,
-    );
-    context.stroke();
-    if (hoverStrength > 0.01) {
-      context.globalAlpha = hoverStrength * 0.5;
-      context.strokeStyle = 'oklch(0.95 0.01 100 / 0.55)';
-      context.lineWidth = 1;
-      context.beginPath();
-      context.arc(
-        state.positions[hook],
-        state.positions[hook + 1],
-        44,
-        0,
-        Math.PI * 2,
-      );
-      context.stroke();
-    }
-    context.restore();
   };
 
   return {
     fit,
-    render,
-    getPoint(clientX: number, clientY: number) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        x: (clientX - rect.left - offsetX) / scale,
-        y: (clientY - rect.top - offsetY) / scale,
-      };
-    },
-    getClientPoint(x: number, y: number) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        x: rect.left + offsetX + x * scale,
-        y: rect.top + offsetY + y * scale,
-      };
+    width: () => cssWidth,
+    height: () => cssHeight,
+    render(state, tieNodes, tieTargets) {
+      context.clearRect(0, 0, cssWidth, cssHeight);
+      context.lineWidth = 1;
+      for (let member = 0; member < state.memberCount; member += 1) {
+        const a = state.memberStart[member] * 2;
+        const b = state.memberEnd[member] * 2;
+        const color = Math.min(
+          Math.round((memberStrain(state, member) / 0.07) * 10),
+          10,
+        );
+        context.strokeStyle = MEMBER_COLORS[color];
+        context.beginPath();
+        context.moveTo(state.positions[a], state.positions[a + 1]);
+        context.lineTo(state.positions[b], state.positions[b + 1]);
+        context.stroke();
+      }
+      context.strokeStyle = TIE_COLOR;
+      context.lineWidth = 1.25;
+      for (let tie = 0; tie < 3; tie += 1) {
+        const point = tieNodes[tie] * 2;
+        context.beginPath();
+        context.moveTo(state.positions[point], state.positions[point + 1]);
+        context.lineTo(tieTargets[tie * 2], tieTargets[tie * 2 + 1]);
+        context.stroke();
+      }
+      context.fillStyle = NODE_COLOR;
+      for (let node = 0; node < state.nodeCount; node += 1) {
+        const point = node * 2;
+        context.fillRect(
+          state.positions[point] - 1,
+          state.positions[point + 1] - 1,
+          2,
+          2,
+        );
+      }
     },
   };
 }
