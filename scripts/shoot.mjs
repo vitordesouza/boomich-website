@@ -45,6 +45,16 @@ try {
           `${name}-${viewport.name}-viewport.png`,
         ),
       });
+      // Walk the page so scroll-driven reveals fire before the full capture.
+      await page.evaluate(async () => {
+        const step = window.innerHeight * 0.7;
+        for (let y = 0; y <= document.body.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise((resolve) => setTimeout(resolve, 90));
+        }
+        window.scrollTo(0, 0);
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      });
       await page.screenshot({
         path: path.join(outputDirectory, `${name}-${viewport.name}-full.png`),
         fullPage: true,

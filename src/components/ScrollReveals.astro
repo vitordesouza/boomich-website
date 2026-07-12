@@ -18,5 +18,16 @@
     );
 
     revealTargets.forEach((target) => observer.observe(target));
+
+    // Content must never stay gated where the observer cannot fire
+    // (print, full-page capture, unusual embedders).
+    const revealAll = (): void => {
+      revealTargets.forEach((target) => {
+        target.classList.add('is-revealed');
+        observer.unobserve(target);
+      });
+    };
+    window.setTimeout(revealAll, 2500);
+    window.addEventListener('beforeprint', revealAll, { once: true });
   }
 </script>
