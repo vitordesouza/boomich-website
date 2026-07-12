@@ -3,7 +3,7 @@ import { site } from '../content/site';
 import Mark from './Mark.astro';
 ---
 
-<header class="site-nav" data-site-nav>
+<header id="top" class="site-nav" data-site-nav>
   <nav class="site-nav__inner" aria-label="Primary navigation">
     <a class="site-nav__brand" href="#top" aria-label="Boomich home">
       <Mark small size={24} />
@@ -25,6 +25,13 @@ import Mark from './Mark.astro';
       Menu
     </button>
   </nav>
+  <div class="site-nav__progress" aria-hidden="true" data-scroll-progress>
+    {
+      Array.from({ length: 48 }, (_, index) => (
+        <span data-progress-tick={index} />
+      ))
+    }
+  </div>
   <div class="site-nav__mobile-menu" id="site-menu" data-menu hidden>
     <button
       class="site-nav__close"
@@ -33,7 +40,13 @@ import Mark from './Mark.astro';
       aria-label="Close menu">Close</button
     >
     <div class="site-nav__mobile-links">
-      {site.navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+      {
+        site.navigation.map((item, index) => (
+          <a href={item.href} style={`--menu-link-index: ${index}`}>
+            {item.label}
+          </a>
+        ))
+      }
     </div>
   </div>
 </header>
@@ -43,10 +56,38 @@ import Mark from './Mark.astro';
   const toggle = nav?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = nav?.querySelector<HTMLElement>('[data-menu]');
   const close = nav?.querySelector<HTMLButtonElement>('[data-menu-close]');
+  const progressTicks = nav?.querySelectorAll<HTMLElement>(
+    '[data-progress-tick]',
+  );
   let opener: HTMLElement | null = null;
+  let closeTimer = 0;
+  let progressFrame = 0;
+  let filledTicks = -1;
+
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  );
+
+  const updateProgress = (): void => {
+    progressFrame = 0;
+    if (!progressTicks?.length) return;
+    const availableScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const progress = availableScroll > 0 ? window.scrollY / availableScroll : 0;
+    const nextFilledTicks = Math.round(
+      Math.min(1, Math.max(0, progress)) * progressTicks.length,
+    );
+    if (nextFilledTicks === filledTicks) return;
+    progressTicks.forEach((tick, index) => {
+      tick.classList.toggle('is-filled', index < nextFilledTicks);
+    });
+    filledTicks = nextFilledTicks;
+  };
 
   const setScrolled = (): void => {
     nav?.classList.toggle('site-nav--scrolled', window.scrollY > 24);
+    if (!progressFrame)
+      progressFrame = window.requestAnimationFrame(updateProgress);
   };
   const focusable = (): HTMLElement[] =>
     menu
@@ -56,13 +97,25 @@ import Mark from './Mark.astro';
       : [];
   const closeMenu = (): void => {
     if (!menu || !toggle) return;
-    menu.hidden = true;
+    if (menu.hidden || menu.classList.contains('is-closing')) return;
     toggle.setAttribute('aria-expanded', 'false');
     document.body.classList.remove('menu-open');
-    opener?.focus();
+    menu.classList.add('is-closing');
+    window.clearTimeout(closeTimer);
+    const finishClose = (): void => {
+      menu.hidden = true;
+      menu.classList.remove('is-closing');
+      opener?.focus();
+    };
+    closeTimer = window.setTimeout(
+      finishClose,
+      prefersReducedMotion.matches ? 0 : 150,
+    );
   };
   const openMenu = (): void => {
     if (!menu || !toggle) return;
+    window.clearTimeout(closeTimer);
+    menu.classList.remove('is-closing');
     opener = toggle;
     menu.hidden = false;
     toggle.setAttribute('aria-expanded', 'true');
@@ -97,6 +150,7 @@ import Mark from './Mark.astro';
     }
   });
   window.addEventListener('scroll', setScrolled, { passive: true });
+  window.addEventListener('resize', setScrolled, { passive: true });
   setScrolled();
 </script>
 
@@ -105,14 +159,23 @@ import Mark from './Mark.astro';
     position: sticky;
     z-index: 10;
     top: 0;
+  }
+
+  /* Glass lives on a pseudo so the nav never becomes the containing
+     block for the fixed-position mobile menu (backdrop-filter would). */
+  .site-nav::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
     background: oklch(0.24 0.03 130 / 0.92);
     backdrop-filter: saturate(0.82) brightness(0.86);
+    content: '';
   }
 
   .site-nav::after {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: 3px;
     left: 0;
     height: 1px;
     background: var(--color-line);
@@ -132,6 +195,33 @@ import Mark from './Mark.astro';
     min-height: 72px;
     margin: 0 auto;
     padding-inline: var(--gutter);
+  }
+
+  .site-nav__progress {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 0;
+    left: var(--gutter);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 4px;
+  }
+
+  .site-nav__progress span {
+    display: block;
+    width: 1px;
+    height: 3px;
+    background: var(--color-line-soft);
+    transition: background-color 160ms var(--ease-ui);
+  }
+
+  .site-nav__progress span:nth-child(6n + 1) {
+    height: 4px;
+  }
+
+  .site-nav__progress span.is-filled {
+    background: var(--color-ink-secondary);
   }
 
   .site-nav__brand {
@@ -202,6 +292,19 @@ import Mark from './Mark.astro';
     padding: max(20px, env(safe-area-inset-top)) var(--gutter)
       max(20px, env(safe-area-inset-bottom));
     background: var(--color-ground);
+    opacity: 1;
+    transition: opacity 200ms var(--ease-ui);
+  }
+
+  @starting-style {
+    .site-nav__mobile-menu:not([hidden]) {
+      opacity: 0;
+    }
+  }
+
+  .site-nav__mobile-menu.is-closing {
+    opacity: 0;
+    transition-duration: 150ms;
   }
 
   .site-nav__close {
@@ -224,6 +327,24 @@ import Mark from './Mark.astro';
     letter-spacing: var(--type-display-tracking);
     line-height: 1.03;
     text-decoration: none;
+    transform: translateY(0);
+    transition: transform 200ms var(--ease-ui);
+  }
+
+  .site-nav__mobile-menu:not([hidden]) .site-nav__mobile-links a {
+    transition-delay: calc(var(--menu-link-index) * 30ms + 30ms);
+  }
+
+  @starting-style {
+    .site-nav__mobile-menu:not([hidden]) .site-nav__mobile-links a {
+      transform: translateY(14px);
+    }
+  }
+
+  .site-nav__mobile-menu.is-closing .site-nav__mobile-links a {
+    transform: translateY(8px);
+    transition-duration: 150ms;
+    transition-delay: 0ms;
   }
 
   @media (max-width: 759px) {
@@ -234,6 +355,14 @@ import Mark from './Mark.astro';
 
     .site-nav__menu-button {
       display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav__progress span,
+    .site-nav__mobile-menu,
+    .site-nav__mobile-links a {
+      transition: none;
     }
   }
 </style>

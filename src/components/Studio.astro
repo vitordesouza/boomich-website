@@ -14,8 +14,12 @@ import { site } from '../content/site';
     </div>
     <div class="studio__stack" aria-label="Technology stack">
       {
-        site.studio.stack.map((row) => (
-          <div class="studio__stack-row">
+        site.studio.stack.map((row, index) => (
+          <div
+            class="studio__stack-row"
+            data-reveal
+            style={`--reveal-delay: ${index * 60}ms`}
+          >
             <h3>{row.label}</h3>
             <ul>
               {row.tags.map((tag) => (

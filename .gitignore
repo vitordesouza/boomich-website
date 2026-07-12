@@ -5,3 +5,4 @@ test-results/
 .astro/
 playwright-report/
 .pnpm-store/
+.DS_Store

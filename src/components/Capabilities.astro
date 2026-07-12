@@ -11,8 +11,12 @@ import { site } from '../content/site';
     <h2 id="capabilities-heading">{site.capabilities.heading}</h2>
     <div class="capabilities__rows">
       {
-        site.capabilities.items.map((item) => (
-          <article class="spec-row">
+        site.capabilities.items.map((item, index) => (
+          <article
+            class="spec-row"
+            data-reveal
+            style={`--reveal-delay: ${index * 60}ms`}
+          >
             <h3>{item.title}</h3>
             <p>{item.body}</p>
             <ul aria-label={`${item.title} technologies`}>

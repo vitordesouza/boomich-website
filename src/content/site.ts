@@ -1,6 +1,8 @@
 export const site = {
   name: 'Boomich',
   description: 'Senior engineering for the hard parts.',
+  metaDescription:
+    'Independent software studio. Senior engineering for the hard parts: realtime systems, cross-platform mobile, applied AI.',
   navigation: [
     { label: 'What we build', href: '#capabilities' },
     { label: 'Shipped', href: '#work' },
@@ -96,5 +98,10 @@ export const site = {
     backToTop: { label: 'Back to top', href: '#top' },
     colophon:
       'Designed and built as one system. Astro, TypeScript, hand-rolled physics. No templates.',
+  },
+  notFound: {
+    heading: 'Nothing at this address.',
+    body: 'The load path ends here. Head back to solid ground.',
+    cta: { label: 'Back to the studio', href: '/' },
   },
 } as const;

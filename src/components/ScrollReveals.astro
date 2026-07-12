@@ -1,0 +1,22 @@
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+    const revealTargets =
+      document.querySelectorAll<HTMLElement>('[data-reveal]');
+    document.documentElement.classList.add('has-scroll-reveals');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-revealed');
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12 },
+    );
+
+    revealTargets.forEach((target) => observer.observe(target));
+  }
+</script>
