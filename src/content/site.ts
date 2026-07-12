@@ -24,17 +24,17 @@ export const site = {
     items: [
       {
         title: 'Cross-platform mobile',
-        body: 'React Native and Expo apps that hold up in production. Background tasks, session state, native modules where JS abstractions break.',
+        body: 'React Native and Expo apps that hold up in production. Background audio, session state, native Kotlin and Swift where JS abstractions break.',
         tags: ['React Native', 'Expo', 'iOS + Android'],
       },
       {
         title: 'Realtime and AI systems',
-        body: 'Streaming pipelines, WebSockets, transcription, AI provider integrations under production load. Built around explicit state machines so failure modes are visible.',
+        body: 'Streaming and transcription pipelines that survive hours-long sessions, backgrounding, and network loss. Explicit state machines, so the system reasons about failure instead of experiencing it.',
         tags: ['WebSockets', 'Streaming audio', 'Provider fallbacks'],
       },
       {
         title: 'Frontend architecture',
-        body: "Greenfield architecture, legacy migrations, monorepo setup, team conventions. The work that determines whether your codebase ages well or doesn't.",
+        body: 'Greenfield architecture, legacy migrations, monorepo structure, team conventions. Every significant decision documented with its trade-offs and defended in writing.',
         tags: ['TypeScript', 'React / Next.js', 'Tooling'],
       },
     ],
@@ -45,15 +45,21 @@ export const site = {
       {
         domain: 'Healthcare · Realtime',
         statement: 'Healthcare AI app running in live clinical environments',
+        detail:
+          'Sole senior engineer owning the technical direction of both mobile platforms: the realtime audio pipeline, and a session lifecycle that survives hours-long recordings through backgrounding and network loss.',
       },
       {
         domain: 'Enterprise · Scale',
         statement:
           'Workforce optimization platform used by major airlines and global retailers',
+        detail:
+          'Shift optimization under labor law, union agreements, and operational constraints. Owned the rebuild of the configuration surface that feeds the optimization engine.',
       },
       {
         domain: 'Compliance · Global',
         statement: 'B2B compliance platform scaled across 90 countries',
+        detail:
+          'Authored the greenfield frontend architecture end to end: framework, API contract, testing, and internationalization with RTL as a day-one constraint.',
       },
     ],
     footnote:
@@ -63,7 +69,7 @@ export const site = {
     heading: 'Built by someone who ships',
     lead: 'Boomich is the independent studio of João Vitor de Souza, a senior TypeScript engineer based in Caldas da Rainha, Portugal.',
     detail:
-      'Thirteen years shipping production-grade web and mobile products across startups, scale-ups, and enterprise. Currently leading frontend on a healthcare AI app running in live clinical environments: owning the realtime audio pipeline, session lifecycle, and the recovery flows that keep it working through the messy realities of mobile use.',
+      'Thirteen years shipping production web and mobile across startups, scale-ups, and enterprise. Most recently the sole senior engineer directing a healthcare AI mobile platform: architecture, team direction, AI integrations, and a realtime pipeline where reliability is not optional.',
     second:
       'Boomich works where complexity is the product: realtime state, cross-platform behavior, mobile lifecycle, AI integrations, multi-team coordination.',
     stack: [
@@ -80,11 +86,12 @@ export const site = {
         tags: ['Vercel', 'Convex', 'AWS', 'Azure', 'Firebase', 'Supabase'],
       },
     ],
-    readout: 'EST 2026 · CALDAS DA RAINHA, PT',
+    readout: 'EST 2026 · CALDAS DA RAINHA, PT · REMOTE, UTC±1',
   },
   contact: {
     heading: 'Bring us the hard part.',
     body: "Realtime state, cross-platform behavior, AI integration, architecture debt. Send the context. We'll tell you what is tractable.",
+    capacity: { label: 'CAPACITY', value: 'OPEN' },
     email: 'joaovitor@boomich.pt',
     copyLabel: 'Copy address',
     copiedLabel: 'Copied',

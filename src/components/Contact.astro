@@ -12,6 +12,10 @@ import { site } from '../content/site';
     <h2 id="contact-heading">{site.contact.heading}</h2>
     <p class="contact__body">{site.contact.body}</p>
     <div class="contact__address">
+      <p class="contact__capacity">
+        {site.contact.capacity.label}: <span>{site.contact.capacity.value}</span
+        >
+      </p>
       <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
       <button
         class="button-ghost copy-address"
@@ -120,8 +124,22 @@ import { site } from '../content/site';
     display: flex;
     flex-wrap: wrap;
     gap: 1rem 1.25rem;
-    align-items: center;
+    align-items: flex-start;
     margin-top: clamp(2.75rem, 6vw, 5rem);
+  }
+
+  .contact__capacity {
+    flex-basis: 100%;
+    color: var(--color-ink-secondary);
+    font-family: var(--font-readout);
+    font-size: var(--type-readout-size);
+    font-weight: var(--type-readout-weight);
+    letter-spacing: var(--type-readout-tracking);
+    line-height: 1.4;
+  }
+
+  .contact__capacity span {
+    color: var(--color-amber);
   }
 
   .contact__address > a {

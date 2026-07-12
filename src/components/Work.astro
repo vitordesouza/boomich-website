@@ -11,6 +11,9 @@ import { site } from '../content/site';
           <article class="work__item" data-work-reveal>
             <p data-work-domain>{item.domain}</p>
             <h3 data-work-statement>{item.statement}</h3>
+            <p class="work__detail" data-work-detail>
+              {item.detail}
+            </p>
           </article>
         ))
       }
@@ -71,6 +74,15 @@ import { site } from '../content/site';
     line-height: var(--type-headline-leading);
   }
 
+  .work__detail {
+    max-width: 70ch;
+    margin-top: 1.25rem;
+    color: var(--color-ink-secondary);
+    font-family: var(--font-body);
+    font-size: clamp(0.9375rem, calc(0.875rem + 0.15vw), 1rem);
+    line-height: 1.55;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     :global(.has-scroll-reveals)
       .work__item[data-work-reveal]
@@ -90,6 +102,16 @@ import { site } from '../content/site';
     }
 
     :global(
+      .has-scroll-reveals .work__item[data-work-reveal] [data-work-detail]
+    ) {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 500ms var(--ease-ui) 240ms,
+        transform 500ms var(--ease-ui) 240ms;
+    }
+
+    :global(
       .has-scroll-reveals
         .work__item[data-work-reveal].is-revealed
         [data-work-domain]
@@ -101,6 +123,15 @@ import { site } from '../content/site';
       .has-scroll-reveals
         .work__item[data-work-reveal].is-revealed
         [data-work-statement]
+    ) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    :global(
+      .has-scroll-reveals
+        .work__item[data-work-reveal].is-revealed
+        [data-work-detail]
     ) {
       opacity: 1;
       transform: translateY(0);
