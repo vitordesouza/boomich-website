@@ -13,12 +13,20 @@ const rootDirectory = path.resolve(
 );
 const outputDirectory = path.join(rootDirectory, 'shots');
 const url = new URL(route, baseUrl).toString();
-const viewports = [
-  { name: 'desktop', width: 1440, height: 900 },
-  { name: 'mobile', width: 390, height: 844 },
-];
+const outputPath = process.env.SHOOT_OUTPUT;
+const width = Number.parseInt(process.env.SHOOT_WIDTH ?? '', 10);
+const height = Number.parseInt(process.env.SHOOT_HEIGHT ?? '', 10);
+const viewports =
+  outputPath && Number.isFinite(width) && Number.isFinite(height)
+    ? [{ name: 'capture', width, height }]
+    : [
+        { name: 'desktop', width: 1440, height: 900 },
+        { name: 'mobile', width: 390, height: 844 },
+      ];
 
-await mkdir(outputDirectory, { recursive: true });
+await mkdir(outputPath ? path.dirname(outputPath) : outputDirectory, {
+  recursive: true,
+});
 
 const browser = await chromium.launch();
 
@@ -28,13 +36,20 @@ try {
       viewport: { width: viewport.width, height: viewport.height },
     });
     await page.goto(url, { waitUntil: 'networkidle' });
-    await page.screenshot({
-      path: path.join(outputDirectory, `${name}-${viewport.name}-viewport.png`),
-    });
-    await page.screenshot({
-      path: path.join(outputDirectory, `${name}-${viewport.name}-full.png`),
-      fullPage: true,
-    });
+    if (outputPath) {
+      await page.screenshot({ path: outputPath });
+    } else {
+      await page.screenshot({
+        path: path.join(
+          outputDirectory,
+          `${name}-${viewport.name}-viewport.png`,
+        ),
+      });
+      await page.screenshot({
+        path: path.join(outputDirectory, `${name}-${viewport.name}-full.png`),
+        fullPage: true,
+      });
+    }
     await page.close();
   }
 } finally {

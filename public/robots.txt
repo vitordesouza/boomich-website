@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://boomich.pt/sitemap-index.xml

@@ -100,3 +100,16 @@ test('site loads, interactive controls work, and meets accessibility checks', as
   expect(accessibilityScanResults.violations).toEqual([]);
   expect(errors).toEqual([]);
 });
+
+test('404 loads and meets accessibility checks', async ({ page }) => {
+  await page.goto('/not-a-route');
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Nothing at this address.' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('link', { name: 'Back to the studio' }),
+  ).toHaveAttribute('href', '/');
+
+  const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+  expect(accessibilityScanResults.violations).toEqual([]);
+});

@@ -1,0 +1,64 @@
+---
+import Mark from '../components/Mark.astro';
+import { site } from '../content/site';
+import Base from '../layouts/Base.astro';
+---
+
+<Base title={site.name} description={site.metaDescription} noindex>
+  <main id="main-content" class="og-card" tabindex="-1">
+    <div class="og-card__lockup">
+      <Mark size={172} />
+      <span>Boomich</span>
+    </div>
+    <h1>{site.description}</h1>
+    <p>EST 2026 · CALDAS DA RAINHA, PT</p>
+  </main>
+</Base>
+
+<style>
+  .og-card {
+    display: grid;
+    min-width: 1200px;
+    min-height: 630px;
+    padding: 72px 88px;
+    background: var(--color-ground);
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .og-card__lockup {
+    display: inline-flex;
+    gap: 2rem;
+    align-items: center;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  h1,
+  p {
+    margin: 0;
+  }
+
+  h1 {
+    align-self: center;
+    max-width: 12ch;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 5.25rem;
+    font-weight: 600;
+    letter-spacing: var(--type-display-tracking);
+    line-height: var(--type-display-leading);
+  }
+
+  p {
+    color: var(--color-ink-secondary);
+    font-family: var(--font-readout);
+    font-size: var(--type-readout-size);
+    font-weight: var(--type-readout-weight);
+    letter-spacing: var(--type-readout-tracking);
+    line-height: 1.5;
+  }
+</style>

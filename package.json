@@ -8,6 +8,8 @@
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "icons:generate": "node scripts/icons.mjs",
+    "og:generate": "pnpm build && node scripts/generate-og.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "lint": "eslint .",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.4",
+    "@astrojs/sitemap": "^3.7.3",
     "@axe-core/playwright": "4.12.1",
     "@playwright/test": "1.61.1",
     "@types/node": "24.10.1",
@@ -26,6 +29,7 @@
     "globals": "16.5.0",
     "prettier": "3.9.5",
     "prettier-plugin-astro": "0.14.1",
+    "sharp": "^0.35.3",
     "typescript": "5.9.3",
     "typescript-eslint": "8.63.0",
     "vitest": "4.1.10"
