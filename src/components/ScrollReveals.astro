@@ -1,33 +1,51 @@
 <script>
+  import { inView, scroll } from 'motion';
+
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   if (!reducedMotion.matches && 'IntersectionObserver' in window) {
-    const revealTargets =
-      document.querySelectorAll<HTMLElement>('[data-reveal]');
+    const revealTargets = document.querySelectorAll<HTMLElement>(
+      '[data-reveal], [data-capability-reveal], [data-work-reveal], [data-contact-reveal]',
+    );
     document.documentElement.classList.add('has-scroll-reveals');
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-revealed');
-          observer.unobserve(entry.target);
-        });
+    const stopReveals = inView(
+      revealTargets,
+      (element) => {
+        element.classList.add('is-revealed');
       },
-      { threshold: 0.12 },
+      { amount: 0.12 },
     );
-
-    revealTargets.forEach((target) => observer.observe(target));
 
     // Content must never stay gated where the observer cannot fire
     // (print, full-page capture, unusual embedders).
     const revealAll = (): void => {
       revealTargets.forEach((target) => {
         target.classList.add('is-revealed');
-        observer.unobserve(target);
       });
+      stopReveals();
     };
     window.setTimeout(revealAll, 2500);
     window.addEventListener('beforeprint', revealAll, { once: true });
+
+    const hero = document.querySelector<HTMLElement>('[data-net-hero]');
+    const canvas = hero?.querySelector<HTMLCanvasElement>('[data-net-canvas]');
+    if (hero && canvas) {
+      scroll(
+        (progress: number) => {
+          // The canvas counters 10% of the section's natural travel, so it
+          // leaves the viewport at 0.9x the document scroll speed.
+          const offset = progress * 10;
+          const fade = Math.max(0, (progress - 0.88) / 0.12);
+          canvas.style.transform = `translate3d(0, ${offset}%, 0)`;
+          canvas.style.opacity = String(1 - fade);
+          canvas.classList.toggle(
+            'is-handoff-active',
+            progress > 0 && progress < 1,
+          );
+        },
+        { target: hero, offset: ['start start', 'end start'] },
+      );
+    }
   }
 </script>

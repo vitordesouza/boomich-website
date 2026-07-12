@@ -45,6 +45,10 @@ The hero is **The Net**, a dependency-free full-bleed canvas lattice suspended b
 
 The site is static. Vercel can deploy the build output with the cache rules in `vercel.json`.
 
+## Colophon
+
+The site is Astro and TypeScript with self-hosted type. The instrument is dependency-free vanilla TypeScript; Lenis provides the optional smooth scroll and Motion supplies the vanilla `scroll()` and `inView()` choreography utilities. Those enhancements are disabled for reduced-motion users.
+
 ## License
 
 Code is available under the [MIT License](LICENSE). The Boomich name, mark, visual identity, and brand assets are reserved.

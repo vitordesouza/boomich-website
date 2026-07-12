@@ -10,7 +10,7 @@ Marketing site + brand system for Boomich (independent software studio). This re
 ## Stack
 
 - Astro 5 + TypeScript (strict). Static output. No React/Vue/etc.
-- Interactive code (the hero instrument) is dependency-free vanilla TS mounted as an Astro island. Zero JS shipped except islands.
+- Interactive code is dependency-free vanilla TS mounted as Astro islands, except Lenis for smooth scrolling and Motion's vanilla `scroll()` / `inView()` utilities. Zero JS shipped except islands; keep the total under 25KB gzip.
 - Styling: plain CSS with custom properties (design tokens in `src/styles/tokens.css`), no Tailwind, no CSS-in-JS. OKLCH colors only.
 - Fonts: self-hosted woff2 in `public/fonts/` (Panchang, Switzer, Martian Mono), latin subset, `font-display: swap`.
 - Tests: Vitest (unit: physics, utils), Playwright (smoke + axe a11y).

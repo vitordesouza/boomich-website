@@ -1,0 +1,61 @@
+<script>
+  import Lenis from 'lenis';
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (!reducedMotion.matches) {
+    const lenis = new Lenis({
+      lerp: 0.1,
+      autoRaf: false,
+    });
+    let frame = 0;
+
+    const tick = (time: number): void => {
+      lenis.raf(time);
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    const syncScrollConsumers = (): void => {
+      window.dispatchEvent(new Event('boomich:scroll'));
+    };
+
+    lenis.on('scroll', syncScrollConsumers);
+    frame = window.requestAnimationFrame(tick);
+
+    const scrollToHash = (hash: string, immediate = false): void => {
+      const id = decodeURIComponent(hash.slice(1));
+      const target = id ? document.getElementById(id) : null;
+      if (!target && hash !== '#top') return;
+      const nav = document.querySelector<HTMLElement>('[data-site-nav]');
+      const offset = hash === '#top' ? 0 : -(nav?.offsetHeight ?? 0);
+      lenis.scrollTo(target ?? 0, { immediate, offset });
+    };
+
+    document.addEventListener('click', (event) => {
+      const origin = event.target;
+      if (!(origin instanceof Element)) return;
+      const link = origin.closest<HTMLAnchorElement>('a[href^="#"]');
+      if (!link || link.classList.contains('skip-link')) return;
+      const hash = link.getAttribute('href');
+      if (!hash || hash === '#') return;
+      const id = decodeURIComponent(hash.slice(1));
+      if (hash !== '#top' && !document.getElementById(id)) return;
+      event.preventDefault();
+      history.pushState(null, '', hash);
+      scrollToHash(hash);
+    });
+
+    window.addEventListener('hashchange', () =>
+      scrollToHash(window.location.hash),
+    );
+    window.addEventListener('pagehide', () => {
+      window.cancelAnimationFrame(frame);
+      lenis.destroy();
+    });
+
+    if (window.location.hash)
+      window.requestAnimationFrame(() =>
+        scrollToHash(window.location.hash, true),
+      );
+  }
+</script>

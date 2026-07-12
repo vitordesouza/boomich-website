@@ -114,3 +114,26 @@ test('404 loads and meets accessibility checks', async ({ page }) => {
   const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
   expect(accessibilityScanResults.violations).toEqual([]);
 });
+
+test('hash navigation remains correct with and without motion enhancement', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page
+    .getByLabel('Primary navigation')
+    .getByRole('link', { name: 'What we build' })
+    .click();
+  await expect(page).toHaveURL(/#capabilities$/);
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBeGreaterThan(0);
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await expect(page.locator('html')).not.toHaveClass(/has-scroll-reveals/);
+  await page
+    .getByLabel('Primary navigation')
+    .getByRole('link', { name: 'What we build' })
+    .click();
+  await expect(page).toHaveURL(/#capabilities$/);
+});

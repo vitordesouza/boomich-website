@@ -2,7 +2,12 @@
 import { site } from '../content/site';
 ---
 
-<section id="contact" class="contact" aria-labelledby="contact-heading">
+<section
+  id="contact"
+  class="contact"
+  data-contact-reveal
+  aria-labelledby="contact-heading"
+>
   <div class="contact__inner">
     <h2 id="contact-heading">{site.contact.heading}</h2>
     <p class="contact__body">{site.contact.body}</p>
@@ -120,14 +125,26 @@ import { site } from '../content/site';
   }
 
   .contact__address > a {
+    position: relative;
     font-family: var(--font-display);
     font-size: clamp(1rem, 5.5vw, 2.5rem);
     font-weight: 600;
     letter-spacing: var(--type-headline-tracking);
     line-height: 1.15;
     white-space: nowrap;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
+    text-decoration: none;
+  }
+
+  .contact__address > a::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.18em;
+    left: 0;
+    height: 1px;
+    background: currentColor;
+    content: '';
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .copy-address {
@@ -136,8 +153,8 @@ import { site } from '../content/site';
   }
 
   .copy-address.is-copied {
-    --button-line: var(--color-amber);
-    --button-text: var(--color-amber);
+    --button-line: var(--color-ink);
+    --button-text: var(--color-ink);
   }
 
   .contact__cta {
@@ -153,5 +170,24 @@ import { site } from '../content/site';
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.has-scroll-reveals)
+      .contact[data-contact-reveal]
+      .contact__address
+      > a::after {
+      transform: scaleX(0);
+      transition: transform 300ms var(--ease-ui);
+    }
+
+    :global(
+      .has-scroll-reveals
+        .contact[data-contact-reveal].is-revealed
+        .contact__address
+        > a::after
+    ) {
+      transform: scaleX(1);
+    }
   }
 </style>

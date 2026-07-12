@@ -7,14 +7,10 @@ import { site } from '../content/site';
     <h2 id="work-heading">{site.work.heading}</h2>
     <div class="work__list">
       {
-        site.work.items.map((item, index) => (
-          <article
-            class="work__item"
-            data-reveal
-            style={`--reveal-delay: ${index * 60}ms`}
-          >
-            <p>{item.domain}</p>
-            <h3>{item.statement}</h3>
+        site.work.items.map((item) => (
+          <article class="work__item" data-work-reveal>
+            <p data-work-domain>{item.domain}</p>
+            <h3 data-work-statement>{item.statement}</h3>
           </article>
         ))
       }
@@ -73,6 +69,42 @@ import { site } from '../content/site';
     max-width: 22ch;
     font-size: var(--type-headline-size);
     line-height: var(--type-headline-leading);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.has-scroll-reveals)
+      .work__item[data-work-reveal]
+      [data-work-domain] {
+      opacity: 0;
+      transition: opacity 150ms var(--ease-ui);
+    }
+
+    :global(
+      .has-scroll-reveals .work__item[data-work-reveal] [data-work-statement]
+    ) {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 500ms var(--ease-ui) 150ms,
+        transform 500ms var(--ease-ui) 150ms;
+    }
+
+    :global(
+      .has-scroll-reveals
+        .work__item[data-work-reveal].is-revealed
+        [data-work-domain]
+    ) {
+      opacity: 1;
+    }
+
+    :global(
+      .has-scroll-reveals
+        .work__item[data-work-reveal].is-revealed
+        [data-work-statement]
+    ) {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .work__footnote {

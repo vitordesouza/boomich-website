@@ -14,7 +14,7 @@ import { site } from '../content/site';
         site.capabilities.items.map((item, index) => (
           <article
             class="spec-row"
-            data-reveal
+            data-capability-reveal
             style={`--reveal-delay: ${index * 60}ms`}
           >
             <h3>{item.title}</h3>
@@ -58,10 +58,10 @@ import { site } from '../content/site';
 
   .capabilities__rows {
     margin-top: clamp(2.25rem, 5vw, 4.5rem);
-    border-top: 1px solid var(--color-line);
   }
 
   .spec-row {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(12rem, 0.76fr) minmax(0, 1.25fr) minmax(
         12rem,
@@ -70,8 +70,54 @@ import { site } from '../content/site';
     gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
     align-items: start;
     padding: clamp(1.5rem, 3.5vw, 2.5rem) 0;
-    border-bottom: 1px solid var(--color-line);
     transition: background-color 160ms var(--ease-ui);
+  }
+
+  .spec-row::before {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: var(--color-line);
+    content: '';
+    transform-origin: left;
+  }
+
+  .spec-row:last-child::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: var(--color-line);
+    content: '';
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.has-scroll-reveals) .spec-row[data-capability-reveal] {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 500ms var(--ease-ui) var(--reveal-delay, 0ms),
+        transform 500ms var(--ease-ui) var(--reveal-delay, 0ms);
+    }
+
+    :global(.has-scroll-reveals) .spec-row[data-capability-reveal]::before {
+      transform: scaleX(0);
+      transition: transform 450ms var(--ease-ui) var(--reveal-delay, 0ms);
+    }
+
+    :global(.has-scroll-reveals) .spec-row[data-capability-reveal].is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    :global(
+      .has-scroll-reveals .spec-row[data-capability-reveal].is-revealed::before
+    ) {
+      transform: scaleX(1);
+    }
   }
 
   .spec-row h3 {

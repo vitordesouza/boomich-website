@@ -5,7 +5,7 @@ import Mark from './Mark.astro';
 
 <header id="top" class="site-nav" data-site-nav>
   <nav class="site-nav__inner" aria-label="Primary navigation">
-    <a class="site-nav__brand" href="#top" aria-label="Boomich home">
+    <a class="site-nav__brand" href="#top" aria-label="Boomich home" data-flex>
       <Mark small size={24} />
       <span>Boomich</span>
     </a>
@@ -150,6 +150,9 @@ import Mark from './Mark.astro';
     }
   });
   window.addEventListener('scroll', setScrolled, { passive: true });
+  // Lenis mirrors its virtual updates through this event. Native scrolling
+  // continues to use the browser scroll event above.
+  window.addEventListener('boomich:scroll', setScrolled);
   window.addEventListener('resize', setScrolled, { passive: true });
   setScrolled();
 </script>
@@ -235,6 +238,12 @@ import Mark from './Mark.astro';
     letter-spacing: -0.01em;
     line-height: 1;
     text-decoration: none;
+    transition: transform 160ms var(--ease-ui);
+  }
+
+  .site-nav__brand:active,
+  .site-nav__mobile-links a:active {
+    transform: scale(0.97);
   }
 
   .site-nav__desktop-links {
@@ -244,16 +253,63 @@ import Mark from './Mark.astro';
   }
 
   .site-nav__desktop-links a {
+    position: relative;
     color: var(--color-ink-secondary);
     font-size: 15px;
     font-weight: 500;
     text-decoration: none;
-    transition: color 160ms var(--ease-ui);
+    transition:
+      color 160ms var(--ease-ui),
+      transform 160ms var(--ease-ui);
+  }
+
+  .site-nav__desktop-links a::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.45rem;
+    left: 0;
+    height: 1px;
+    background: currentColor;
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 160ms var(--ease-ui);
   }
 
   @media (hover: hover) and (pointer: fine) {
     .site-nav__desktop-links a:hover {
       color: var(--color-ink);
+    }
+
+    .site-nav__desktop-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .site-nav__brand[data-flex]:hover svg path {
+      stroke-dasharray: 24 176;
+      animation: nav-mark-load-test 420ms var(--ease-ui) 1;
+    }
+
+    .site-nav__brand[data-flex]:hover svg path:nth-child(2) {
+      animation-delay: 48ms;
+    }
+  }
+
+  .site-nav__desktop-links a:active {
+    transform: scale(0.97);
+  }
+
+  @keyframes nav-mark-load-test {
+    0% {
+      stroke-dashoffset: 0;
+    }
+
+    55% {
+      stroke-dashoffset: -56;
+    }
+
+    100% {
+      stroke-dashoffset: -112;
     }
   }
 
@@ -359,6 +415,11 @@ import Mark from './Mark.astro';
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .site-nav__brand[data-flex] svg path {
+      animation: none !important;
+      stroke-dasharray: none;
+    }
+
     .site-nav__progress span,
     .site-nav__mobile-menu,
     .site-nav__mobile-links a {

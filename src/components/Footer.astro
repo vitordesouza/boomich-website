@@ -59,10 +59,16 @@ import Mark from './Mark.astro';
   }
 
   nav a {
+    display: inline-block;
     color: var(--color-ink-secondary);
     font-size: 0.875rem;
     font-weight: 500;
     text-underline-offset: 0.18em;
+    transition: transform 160ms var(--ease-ui);
+  }
+
+  nav a:active {
+    transform: scale(0.97);
   }
 
   .footer__colophon {
