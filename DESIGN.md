@@ -145,15 +145,16 @@ Favicon: mark-small, ink on ground, in SVG + 32px PNG.
 
 - **Buttons**: chamfered rectangles. Primary: Ink fill, Ground text; hover raises brightness a step and translates -1px; press returns. Ghost: 1px Line border, Ink text; hover border to Ink. Focus: 2px Ink outline offset 2px. Never amber.
 - **Nav**: sticky, Ground at 92% opacity, hairline bottom rule appears on scroll. Mark + wordmark left. Links: Switzer 500, Ink Secondary to Ink. CTA: ghost button. Mobile: links collapse into a full-screen Ground overlay with display-scale links.
-- **Spec rows** (capabilities, engagements): full-width engraved rows separated by Line. Row = title (Switzer 600) + description (Ink Secondary) + rated tags (small Switzer 500 chips with 1px Line border, square). Hover: Ground Raised field bleeds to full row width. No cards, no icons, no numbers.
+- **Spec rows** (capabilities): drawing sheets separated by Line. Each row is a two-column composition — the figure on its drawing plate beside a content block (title Switzer 600, description Ink Secondary, rated tags as small Switzer 500 chips with 1px Line border) — alternating sides row by row so the section reads as a sequence. No hover fields, no cards, no icons.
+- **Drawing plates**: Ground Recessed sheets with a 1px Line frame, machined into the page — not cards: no elevation, no shadow. Every plate carries a mono index label (`FIG. 01 — SHARED CORE`); the portrait continues the series as FIG. 04. Engagement rows remain full-width engraved rows per the original rule.
 - **Readout panel**: chamfered Ground Raised panel housing the instrument's live values.
 - **Forms** (contact): chamfered fields, Ground Recessed wells, 1px Line borders, Ink text; focus ring per buttons. Submission in flight is a legitimate amber state.
 - **Footer**: Ground Recessed, hairline top rule, colophon line, GitHub link, LDA registration line.
-- **Figures**: engraved technical illustrations in capability rows. Use hairline ink strokes, with exactly one amber load element per figure: the subject being carried, measured, or transferred. Mono labels are permitted only for real semantics such as IN/OUT. Structure draws on reveal; one slow ambient load cycle may run while the figure is onscreen.
+- **Figures**: engraved technical illustrations on the drawing plates, built in true 30° isometric projection — no eyeballed perspective. Drafting language: solids are transparent wireframes; visible edges stroke at 1.25px/0.55 ink, receding edges at 1px/0.28, and anything passing through material is dashed (hidden-line convention). Exactly one amber element per figure — the load being carried, measured, or transferred — and amber elements are the only solid forms in the drawing. Mono labels only for real semantics (IN/OUT, FIG indices). Structure draws in the first time the figure is seen (never on a timer); one slow ambient load cycle runs while onscreen, and its first and last frames must be identical — a loop that visibly restarts is a defect.
 
 ### Photography exception
 
-Photography is banned except for the principal's real portrait in the Studio section. It is cropped tightly, duotoned into the Ground-to-Ink brand ramp, and framed with a 1px Line rule. Stock and generated imagery remain banned.
+Photography is banned except for the principal's real portrait in the Studio section. It is cropped tightly and duotoned hard into the brand ramp — levels clipped so shadows crush to deep olive and highlights blow to warm Ink; a washed-out midtone print is a defect. It is framed with a 1px Line rule and captioned in mono as FIG. 04, continuing the drawing series. Stock and generated imagery remain banned.
 
 ## 8. Motion
 

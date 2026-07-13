@@ -4,7 +4,11 @@ import FigCore from './figures/FigCore.astro';
 import FigSeam from './figures/FigSeam.astro';
 import FigSignal from './figures/FigSignal.astro';
 
-const figures = [FigCore, FigSignal, FigSeam];
+const figures = [
+  { Figure: FigCore, label: 'FIG. 01 — SHARED CORE' },
+  { Figure: FigSignal, label: 'FIG. 02 — SIGNAL PATH' },
+  { Figure: FigSeam, label: 'FIG. 03 — THE SEAM' },
+];
 ---
 
 <section
@@ -16,29 +20,30 @@ const figures = [FigCore, FigSignal, FigSeam];
     <h2 id="capabilities-heading">{site.capabilities.heading}</h2>
     <div class="capabilities__rows">
       {
-        site.capabilities.items.map((item, index) => (
-          <article
-            class="spec-row"
-            data-capability-reveal
-            style={`--reveal-delay: ${index * 60}ms`}
-          >
-            <h3>{item.title}</h3>
-            <div class="spec-row__figure">
-              {(() => {
-                const Figure = figures[index];
-                return <Figure />;
-              })()}
-            </div>
-            <div class="spec-row__content">
-              <p>{item.body}</p>
-              <ul aria-label={`${item.title} technologies`}>
-                {item.tags.map((tag) => (
-                  <li>{tag}</li>
-                ))}
-              </ul>
-            </div>
-          </article>
-        ))
+        site.capabilities.items.map((item, index) => {
+          const { Figure, label } = figures[index];
+          return (
+            <article
+              class="spec-row"
+              data-capability-reveal
+              style={`--reveal-delay: ${index * 60}ms`}
+            >
+              <div class="spec-row__plate">
+                <Figure />
+                <span class="spec-row__plate-label">{label}</span>
+              </div>
+              <div class="spec-row__content">
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+                <ul aria-label={`${item.title} technologies`}>
+                  {item.tags.map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          );
+        })
       }
     </div>
   </div>
@@ -70,20 +75,24 @@ const figures = [FigCore, FigSignal, FigSeam];
   }
 
   .capabilities__rows {
-    margin-top: clamp(2.25rem, 5vw, 4.5rem);
+    margin-top: clamp(2.25rem, 5vw, 4rem);
   }
 
+  /* Each capability is a drawing sheet: the figure on its recessed plate,
+     its subject beside it. Plates alternate sides so the section reads as
+     a sequence, not a table. */
   .spec-row {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(11rem, 0.65fr) minmax(0, 1.25fr) minmax(
-        12rem,
-        14.375rem
-      );
-    gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: center;
-    padding: clamp(1.5rem, 3.5vw, 2.5rem) 0;
-    transition: background-color 160ms var(--ease-ui);
+    padding: clamp(2rem, 4vw, 3.25rem) 0;
+    column-gap: clamp(2.5rem, 6vw, 5.5rem);
+    row-gap: 1.5rem;
+  }
+
+  .spec-row:nth-of-type(even) .spec-row__plate {
+    order: 2;
   }
 
   .spec-row::before {
@@ -133,19 +142,41 @@ const figures = [FigCore, FigSignal, FigSeam];
     }
   }
 
-  .spec-row h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.35;
+  .spec-row__plate {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    padding-bottom: clamp(2.25rem, 4vw, 2.75rem);
+    border: 1px solid var(--color-line);
+    background: var(--color-ground-recessed);
+  }
+
+  .spec-row__plate-label {
+    position: absolute;
+    bottom: 0.85rem;
+    left: 1rem;
+    color: var(--color-ink-faint);
+    font-family: var(--font-readout);
+    font-size: 10px;
+    font-weight: var(--type-readout-weight);
+    letter-spacing: 0.08em;
   }
 
   .spec-row__content {
     display: grid;
-    gap: 1.25rem;
+    gap: 1.15rem;
+    max-width: 46ch;
+  }
+
+  .spec-row h3 {
+    font-size: clamp(1.15rem, 1rem + 0.8vw, 1.45rem);
+    font-weight: 600;
+    line-height: 1.3;
   }
 
   .spec-row p {
-    max-width: 55ch;
     color: var(--color-ink-secondary);
   }
 
@@ -160,17 +191,7 @@ const figures = [FigCore, FigSignal, FigSeam];
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
-  }
-
-  .spec-row__figure {
-    width: min(100%, 230px);
-  }
-
-  /* The signal figure is wide-aspect; give it more run so its machine
-     reads at the same visual weight as the other figures. */
-  .spec-row:nth-of-type(2) .spec-row__figure {
-    width: min(100%, 300px);
-    justify-self: end;
+    margin-top: 0.35rem;
   }
 
   .spec-row li {
@@ -182,28 +203,19 @@ const figures = [FigCore, FigSignal, FigSeam];
     line-height: 1.2;
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .spec-row:hover {
-      background: var(--color-ground-raised);
-    }
-  }
-
-  @media (max-width: 979px) {
+  @media (max-width: 899px) {
     .spec-row {
       grid-template-columns: minmax(0, 1fr);
       align-items: start;
     }
 
-    .spec-row__figure {
-      width: min(100%, 260px);
-      justify-self: start;
+    /* Figure first on a single column: it draws the eye, the text answers. */
+    .spec-row:nth-of-type(even) .spec-row__plate {
+      order: 0;
     }
-  }
 
-  @media (max-width: 560px) {
-    .spec-row {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    .spec-row__content {
+      max-width: 55ch;
     }
   }
 </style>

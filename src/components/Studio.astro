@@ -6,29 +6,26 @@ import { site } from '../content/site';
   <div class="studio__inner">
     <h2 id="studio-heading">{site.studio.heading}</h2>
     <div class="studio__intro">
-      <p class="studio__lead">{site.studio.lead}</p>
-      <div class="studio__right">
-        <figure
-          class="studio__portrait"
-          data-reveal
-          style="--reveal-delay: 80ms"
-        >
-          <picture>
-            <source srcset="/portrait.avif" type="image/avif" />
-            <img
-              src="/portrait.webp"
-              width="640"
-              height="800"
-              loading="lazy"
-              alt="João Vitor de Souza, the engineer behind Boomich."
-            />
-          </picture>
-        </figure>
+      <div class="studio__text">
+        <p class="studio__lead">{site.studio.lead}</p>
         <div class="studio__detail">
           <p>{site.studio.detail}</p>
           <p>{site.studio.second}</p>
         </div>
       </div>
+      <figure class="studio__portrait" data-reveal style="--reveal-delay: 80ms">
+        <picture>
+          <source srcset="/portrait.avif" type="image/avif" />
+          <img
+            src="/portrait.webp"
+            width="640"
+            height="800"
+            loading="lazy"
+            alt="João Vitor de Souza, the engineer behind Boomich."
+          />
+        </picture>
+        <figcaption>FIG. 04 — THE PRINCIPAL</figcaption>
+      </figure>
     </div>
     <div class="studio__stack" aria-label="Technology stack">
       {
@@ -79,13 +76,14 @@ import { site } from '../content/site';
 
   .studio__intro {
     display: grid;
-    grid-template-columns: minmax(0, 0.93fr) minmax(0, 0.82fr);
-    gap: clamp(2.5rem, 10vw, 9rem);
+    grid-template-columns: minmax(0, 1fr) clamp(260px, 28vw, 340px);
+    gap: clamp(2.5rem, 7vw, 6.5rem);
+    align-items: center;
     margin-top: clamp(2.75rem, 6vw, 5.5rem);
   }
 
   .studio__lead {
-    max-width: 26ch;
+    max-width: 32ch;
     font-size: clamp(1.25rem, 1.2rem + 0.7vw, 1.65rem);
     line-height: 1.45;
   }
@@ -93,24 +91,33 @@ import { site } from '../content/site';
   .studio__detail {
     display: grid;
     gap: 1.4rem;
-    max-width: 57ch;
+    max-width: 54ch;
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
     color: var(--color-ink-secondary);
   }
 
-  .studio__right {
-    display: grid;
-    gap: clamp(2rem, 4vw, 3.5rem);
+  .studio__portrait {
+    margin: 0;
   }
 
-  .studio__portrait {
-    width: min(100%, 300px);
-    margin: 0;
+  .studio__portrait picture {
+    display: block;
     border: 1px solid var(--color-line);
   }
 
   .studio__portrait img {
+    display: block;
     width: 100%;
     height: auto;
+  }
+
+  .studio__portrait figcaption {
+    margin-top: 0.8rem;
+    color: var(--color-ink-faint);
+    font-family: var(--font-readout);
+    font-size: 10px;
+    font-weight: var(--type-readout-weight);
+    letter-spacing: 0.08em;
   }
 
   .studio__stack {
@@ -168,7 +175,11 @@ import { site } from '../content/site';
   @media (max-width: 979px) {
     .studio__intro {
       grid-template-columns: 1fr;
-      gap: 1.75rem;
+      gap: 2.25rem;
+    }
+
+    .studio__portrait {
+      width: min(100%, 340px);
     }
   }
 
