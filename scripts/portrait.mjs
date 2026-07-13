@@ -9,11 +9,14 @@ if (!input) {
 
 const outputWidth = 640;
 const outputHeight = 800;
-const shadow = [28, 33, 24];
-// Tritone: the olive-gray mid stop is what makes the portrait read as
-// printed into the page rather than a neutral B&W pasted onto it.
-const mid = [108, 110, 90];
-const highlight = [236, 233, 220];
+// Duotone with hard levels: everything below BLACK_POINT crushes to the deep
+// olive shadow, everything above WHITE_POINT blows to warm ink. Both stops
+// stay olive-tinted so the print belongs to the page; the clip is what gives
+// it punch.
+const shadow = [18, 22, 13];
+const highlight = [238, 235, 219];
+const BLACK_POINT = 0.16;
+const WHITE_POINT = 0.82;
 
 const metadata = await sharp(input).metadata();
 if (!metadata.width || !metadata.height) {
@@ -37,16 +40,16 @@ const { data, info } = await sharp(input)
 const duotone = Buffer.alloc(info.width * info.height * 3);
 for (let index = 0; index < data.length; index += 1) {
   const normalized = data[index] / 255;
-  const smooth = normalized * normalized * (3 - 2 * normalized);
-  const contrast = normalized * 0.52 + smooth * 0.48;
+  const leveled = Math.min(
+    1,
+    Math.max(0, (normalized - BLACK_POINT) / (WHITE_POINT - BLACK_POINT)),
+  );
+  const contrast = leveled * leveled * (3 - 2 * leveled);
   const outputIndex = index * 3;
 
   for (let channel = 0; channel < 3; channel += 1) {
     const value =
-      contrast < 0.5
-        ? shadow[channel] + (mid[channel] - shadow[channel]) * (contrast * 2)
-        : mid[channel] +
-          (highlight[channel] - mid[channel]) * ((contrast - 0.5) * 2);
+      shadow[channel] + (highlight[channel] - shadow[channel]) * contrast;
     duotone[outputIndex + channel] = Math.round(value);
   }
 }
