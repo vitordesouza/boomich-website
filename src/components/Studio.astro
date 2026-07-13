@@ -7,9 +7,27 @@ import { site } from '../content/site';
     <h2 id="studio-heading">{site.studio.heading}</h2>
     <div class="studio__intro">
       <p class="studio__lead">{site.studio.lead}</p>
-      <div class="studio__detail">
-        <p>{site.studio.detail}</p>
-        <p>{site.studio.second}</p>
+      <div class="studio__right">
+        <figure
+          class="studio__portrait"
+          data-reveal
+          style="--reveal-delay: 80ms"
+        >
+          <picture>
+            <source srcset="/portrait.avif" type="image/avif" />
+            <img
+              src="/portrait.webp"
+              width="640"
+              height="800"
+              loading="lazy"
+              alt="João Vitor de Souza, the engineer behind Boomich."
+            />
+          </picture>
+        </figure>
+        <div class="studio__detail">
+          <p>{site.studio.detail}</p>
+          <p>{site.studio.second}</p>
+        </div>
       </div>
     </div>
     <div class="studio__stack" aria-label="Technology stack">
@@ -79,6 +97,22 @@ import { site } from '../content/site';
     color: var(--color-ink-secondary);
   }
 
+  .studio__right {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .studio__portrait {
+    width: min(100%, 300px);
+    margin: 0;
+    border: 1px solid var(--color-line);
+  }
+
+  .studio__portrait img {
+    width: 100%;
+    height: auto;
+  }
+
   .studio__stack {
     margin-top: clamp(3.5rem, 8vw, 7.25rem);
     border-top: 1px solid var(--color-line);
@@ -131,7 +165,7 @@ import { site } from '../content/site';
     line-height: 1.5;
   }
 
-  @media (max-width: 759px) {
+  @media (max-width: 979px) {
     .studio__intro {
       grid-template-columns: 1fr;
       gap: 1.75rem;

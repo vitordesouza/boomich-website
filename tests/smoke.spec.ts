@@ -29,6 +29,16 @@ test('site loads, interactive controls work, and meets accessibility checks', as
   await expect(
     page.getByRole('heading', { level: 2, name: 'What we build' }),
   ).toBeVisible();
+  await expect(page.locator('[data-figure]')).toHaveCount(3);
+  await expect(
+    page.getByRole('img', { name: /one shared core/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('img', { name: /noisy input signal/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('img', { name: /machined plates/i }),
+  ).toBeVisible();
   await expect(
     page.getByRole('heading', { level: 2, name: "Where we've shipped" }),
   ).toBeVisible();
@@ -37,6 +47,9 @@ test('site loads, interactive controls work, and meets accessibility checks', as
       level: 2,
       name: 'Built by someone who ships',
     }),
+  ).toBeVisible();
+  await expect(
+    page.getByAltText('João Vitor de Souza, the engineer behind Boomich.'),
   ).toBeVisible();
   await expect(
     page.getByRole('heading', { level: 2, name: 'Bring us the hard part.' }),
@@ -131,6 +144,9 @@ test('hash navigation remains correct with and without motion enhancement', asyn
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await expect(page.locator('html')).not.toHaveClass(/has-scroll-reveals/);
+  await expect(page.locator('[data-figure]')).toHaveCount(3);
+  await expect(page.locator('[data-figure].is-live')).toHaveCount(0);
+  await expect(page.locator('[data-figure] .draw').first()).toBeVisible();
   await page
     .getByLabel('Primary navigation')
     .getByRole('link', { name: 'What we build' })
