@@ -8,10 +8,15 @@ export const INTERACTION_RADIUS = 200;
 export const ENERGY_THRESHOLD = 22;
 
 const DAMPING = 0.985;
-const VELOCITY_COUPLING = 1.2;
-const POSITIONAL_PULL = 0.16;
+const VELOCITY_COUPLING = 1.5;
+const POSITIONAL_PULL = 0.2;
 const IDLE_WAVE_AMPLITUDE = 0.05;
-const MAX_DISPLACEMENT = 95;
+const MAX_DISPLACEMENT = 120;
+// Graded rest springs replace hard perimeter pins: the sheet is stiffest
+// near its supports (edges) and loosest in the middle, so the whole
+// surface responds to load, including at the borders.
+const REST_SPRING_EDGE = 0.05;
+const REST_SPRING_CENTER = 0.012;
 
 export interface NetSpec {
   width: number;
@@ -22,7 +27,7 @@ export interface NetSpec {
 
 /**
  * Caller-owned, fixed-capacity buffers keep the simulation allocation-free
- * after construction. The perimeter is the fixed support for the net.
+ * after construction. The four corners are the net's fixed supports.
  */
 export interface NetState {
   readonly positions: Float32Array;
@@ -32,6 +37,7 @@ export interface NetState {
   readonly memberEnd: Int16Array;
   readonly restLengths: Float32Array;
   readonly pinned: Uint8Array;
+  readonly restSpring: Float32Array;
   width: number;
   height: number;
   columns: number;
@@ -64,7 +70,7 @@ function setMember(state: NetState, start: number, end: number): void {
   state.memberCount += 1;
 }
 
-/** Builds the fully-braced, perimeter-pinned structural field. */
+/** Builds the fully-braced structural field, anchored at its corners. */
 export function createNet(spec: NetSpec): NetState {
   const width = Math.max(spec.width, 1);
   const height = Math.max(spec.height, 1);
@@ -89,6 +95,7 @@ export function createNet(spec: NetSpec): NetState {
     memberEnd: new Int16Array(MAX_MEMBERS),
     restLengths: new Float32Array(MAX_MEMBERS),
     pinned: new Uint8Array(MAX_NODES),
+    restSpring: new Float32Array(MAX_NODES),
     width,
     height,
     columns,
@@ -112,9 +119,19 @@ export function createNet(spec: NetSpec): NetState {
         inset + ((width - inset * 2) * column) / (columns - 1);
       state.restPositions[point + 1] =
         top + ((bottom - top) * row) / (rows - 1);
+      // Only the four corners are hard anchors; every other node, edges
+      // included, is free and held by a graded spring toward rest.
       state.pinned[node] = Number(
-        row === 0 || row === rows - 1 || column === 0 || column === columns - 1,
+        (row === 0 || row === rows - 1) &&
+          (column === 0 || column === columns - 1),
       );
+      const edgeCloseness = Math.min(
+        Math.min(row, rows - 1 - row) / Math.max(1, (rows - 1) / 2),
+        Math.min(column, columns - 1 - column) / Math.max(1, (columns - 1) / 2),
+      );
+      state.restSpring[node] =
+        REST_SPRING_EDGE +
+        (REST_SPRING_CENTER - REST_SPRING_EDGE) * Math.min(1, edgeCloseness);
     }
   }
   state.positions.set(state.restPositions);
@@ -173,6 +190,8 @@ export function stepNet(state: NetState, dt: number): number {
     let velocityY = (y - state.previousPositions[point + 1]) * DAMPING;
     state.previousPositions[point] = x;
     state.previousPositions[point + 1] = y;
+    velocityX += (state.restPositions[point] - x) * state.restSpring[node];
+    velocityY += (state.restPositions[point + 1] - y) * state.restSpring[node];
     if (state.fieldStrength > 0) {
       const dx = state.fieldX - x;
       const dy = state.fieldY - y;

@@ -132,13 +132,13 @@ Favicon: mark-small, ink on ground, in SVG + 32px PNG.
 
 ## 6. The Hero Instrument (signature component)
 
-**The Net** is a full-bleed, fully braced lattice rendered behind the hero copy. Its perimeter is pinned; three tie members connect nearby lattice nodes to the top edge of the copy block. The copy follows the mean tie displacement by a restrained amount, so the message looks suspended rather than overlaid. Members are 1px Ink, nodes are square, and ties are 1.25px Ink.
+**The Net** is a full-bleed, fully braced lattice rendered behind the hero copy. Only its four corners are hard anchors; every other node, edges included, is free and held by a graded spring toward rest (stiffest near the supports, loosest in the middle), so the whole surface responds to load. The copy block rides the fabric: it follows the mean displacement of the nodes above it by a restrained, clamped amount, so the message reads as part of the structure without any literal attachment drawn. Members are 1px Ink, nodes are square.
 
-- Physics: dependency-free verlet integration with one distance-constraint pass per frame, fixed perimeter supports, damping 0.985, and a bounded local displacement. It is deliberately compliant: the net must visibly deform before it recovers. Pure TypeScript physics is unit-tested.
+- Physics: dependency-free verlet integration with one distance-constraint pass per frame, corner anchors plus graded rest springs, damping 0.985, and a bounded local displacement. It is deliberately compliant: the net must visibly deform before it recovers, at the borders as much as the center. Pure TypeScript physics is unit-tested.
 - Interaction: pointer hover applies a local 30% field; a mouse drag, horizontal touch movement, or touch hold applies 100%. A vertical touch scroll still receives the 30% passing field and must keep normal page scrolling. The radius is 200px. The field couples pointer velocity at 1.2 and pulls position at 0.16.
 - Status line: Switzer small in Ink Faint, directly below the CTAs. It says `Push anywhere. It holds.` (or `Press anywhere. It holds.` on touch devices), then crossfades to `Still holding.` while the net carries meaningful energy. It is the polite, throttled accessible state announcement; wording and crossfade communicate state, never amber.
 - Amber rule: amber is reserved for strained members only, ramping from the 0.3 Ink member base toward Amber by `strain / 0.07`. The status line, buttons, and static lattice never use amber.
-- Idle: a nearly imperceptible 0.05 wave keeps the unloaded net alive. Under reduced motion the settled net and ties render once, the copy does not translate, and no animation loop runs.
+- Idle: a nearly imperceptible 0.05 wave keeps the unloaded net alive. Under reduced motion the settled net renders once, the copy does not translate, and no animation loop runs.
 - Performance: DPR is capped at 2; rAF pauses offscreen and when the tab is hidden; resize refits are debounced; the frame path allocates no simulation buffers. The first settled canvas frame is painted before fonts finish loading.
 
 ## 7. Components

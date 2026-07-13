@@ -118,7 +118,7 @@ export function mountNet(hero: HTMLElement): () => void {
   };
 
   const render = (): void => {
-    renderer.render(state, tieNodes, tieTargets);
+    renderer.render(state);
     if (reducedMotion) return;
     let meanX = 0;
     let meanY = 0;

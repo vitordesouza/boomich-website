@@ -9,17 +9,36 @@ function settle(state: ReturnType<typeof createNet>, frames = 1_500): void {
 }
 
 describe('The Net physics', () => {
-  it('is stable at rest and keeps its perimeter pinned', () => {
+  it('is stable at rest and keeps its corner anchors fixed', () => {
     const state = createNet({ width: 960, height: 680, columns: 10, rows: 7 });
     state.idleEnabled = false;
     settle(state);
     expect(energy(state)).toBeLessThan(0.08);
+    let anchors = 0;
     for (let node = 0; node < state.nodeCount; node += 1) {
       if (!state.pinned[node]) continue;
+      anchors += 1;
       const point = node * 2;
       expect(state.positions[point]).toBe(state.restPositions[point]);
       expect(state.positions[point + 1]).toBe(state.restPositions[point + 1]);
     }
+    expect(anchors).toBe(4);
+  });
+
+  it('responds to load at the borders, not only the center', () => {
+    const state = createNet({ width: 960, height: 680, columns: 10, rows: 7 });
+    state.idleEnabled = false;
+    // Load applied at the midpoint of the top edge.
+    const edgeNode = Math.floor(state.columns / 2) * 2;
+    const edgeX = state.restPositions[edgeNode];
+    const edgeY = state.restPositions[edgeNode + 1];
+    setField(state, edgeX, edgeY, 0, 72, 1);
+    settle(state, 120);
+    const edgeDisplacement = Math.hypot(
+      state.positions[edgeNode] - state.restPositions[edgeNode],
+      state.positions[edgeNode + 1] - state.restPositions[edgeNode + 1],
+    );
+    expect(edgeDisplacement).toBeGreaterThan(6);
   });
 
   it('locally deforms around an applied load field', () => {

@@ -14,14 +14,13 @@ const MEMBER_COLORS = [
   'oklch(0.82 0.14 76 / 0.85)',
 ] as const;
 
-const TIE_COLOR = 'oklch(0.95 0.01 100 / 0.5)';
 const NODE_COLOR = 'oklch(0.95 0.01 100 / 0.58)';
 
 export interface NetRenderer {
   fit(): void;
   width(): number;
   height(): number;
-  render(state: NetState, tieNodes: Int16Array, tieTargets: Float32Array): void;
+  render(state: NetState): void;
 }
 
 export function createNetRenderer(canvas: HTMLCanvasElement): NetRenderer {
@@ -44,7 +43,7 @@ export function createNetRenderer(canvas: HTMLCanvasElement): NetRenderer {
     fit,
     width: () => cssWidth,
     height: () => cssHeight,
-    render(state, tieNodes, tieTargets) {
+    render(state) {
       context.clearRect(0, 0, cssWidth, cssHeight);
       context.lineWidth = 1;
       for (let member = 0; member < state.memberCount; member += 1) {
@@ -58,15 +57,6 @@ export function createNetRenderer(canvas: HTMLCanvasElement): NetRenderer {
         context.beginPath();
         context.moveTo(state.positions[a], state.positions[a + 1]);
         context.lineTo(state.positions[b], state.positions[b + 1]);
-        context.stroke();
-      }
-      context.strokeStyle = TIE_COLOR;
-      context.lineWidth = 1.25;
-      for (let tie = 0; tie < 3; tie += 1) {
-        const point = tieNodes[tie] * 2;
-        context.beginPath();
-        context.moveTo(state.positions[point], state.positions[point + 1]);
-        context.lineTo(tieTargets[tie * 2], tieTargets[tie * 2 + 1]);
         context.stroke();
       }
       context.fillStyle = NODE_COLOR;
