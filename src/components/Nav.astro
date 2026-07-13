@@ -285,13 +285,12 @@ import Mark from './Mark.astro';
       transform: scaleX(1);
     }
 
-    .site-nav__brand[data-flex]:hover svg path {
-      stroke-dasharray: 24 176;
-      animation: nav-mark-load-test 420ms var(--ease-ui) 1;
+    .site-nav__brand[data-flex] svg {
+      transform-origin: 50% 100%;
     }
 
-    .site-nav__brand[data-flex]:hover svg path:nth-child(2) {
-      animation-delay: 48ms;
+    .site-nav__brand[data-flex]:hover svg {
+      animation: nav-mark-load-test 420ms var(--ease-ui) 1;
     }
   }
 
@@ -299,17 +298,18 @@ import Mark from './Mark.astro';
     transform: scale(0.97);
   }
 
+  /* The mark takes load and recovers: brief vertical compression. */
   @keyframes nav-mark-load-test {
     0% {
-      stroke-dashoffset: 0;
+      transform: scaleY(1);
     }
 
-    55% {
-      stroke-dashoffset: -56;
+    40% {
+      transform: scaleY(0.94);
     }
 
     100% {
-      stroke-dashoffset: -112;
+      transform: scaleY(1);
     }
   }
 
