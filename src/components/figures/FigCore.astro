@@ -1,0 +1,156 @@
+<svg
+  class="figure figure--core"
+  data-figure
+  role="img"
+  aria-label="Figure: one shared core suspended above two device platforms"
+  viewBox="18 24 324 206"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <g class="figure__structure">
+    <g class="stroke">
+      <path class="draw" pathLength="1" d="M28 168 73 142 149 186 104 212Z"
+      ></path>
+      <path class="draw" pathLength="1" d="M28 168v12l76 44v-12"></path>
+      <path class="draw" pathLength="1" d="M149 186v12l-45 26v-12"></path>
+      <path
+        class="draw stroke-soft"
+        pathLength="1"
+        d="m41 168 33-19 62 36-33 19Z"></path>
+      <path class="draw" pathLength="1" d="M211 186l76-44 45 26-76 44Z"></path>
+      <path class="draw" pathLength="1" d="m211 186 76 44v-12l-76-44"></path>
+      <path class="draw" pathLength="1" d="m332 168-45 26v36l45-26Z"></path>
+      <path
+        class="draw stroke-soft"
+        pathLength="1"
+        d="m224 185 62-36 33 19-62 36Z"></path>
+    </g>
+    <circle class="node" cx="72" cy="151" r="2"></circle>
+    <circle class="node" cx="288" cy="151" r="2"></circle>
+    <circle class="node" cx="52" cy="170" r="1.5"></circle>
+    <circle class="node" cx="308" cy="170" r="1.5"></circle>
+  </g>
+
+  <g class="figure__leaders stroke-soft" stroke-dasharray="3 4">
+    <path class="draw" pathLength="1" d="M167 105 72 151"></path>
+    <path class="draw" pathLength="1" d="m193 105 95 46"></path>
+  </g>
+
+  <g class="figure__core" color="var(--color-amber)">
+    <g class="amberline">
+      <path
+        class="draw draw--amber"
+        pathLength="1"
+        d="m158 70 22-13 22 13-22 13Z"></path>
+      <path class="draw draw--amber" pathLength="1" d="m158 70v23l22 13V83"
+      ></path>
+      <path class="draw draw--amber" pathLength="1" d="m202 70v23l-22 13"
+      ></path>
+    </g>
+    <circle class="amberfill" cx="180" cy="106" r="2.6"></circle>
+  </g>
+</svg>
+
+<style>
+  .figure {
+    width: 100%;
+    color: var(--color-ink);
+    overflow: visible;
+  }
+
+  .stroke,
+  .stroke-soft,
+  .amberline {
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+  }
+
+  .stroke {
+    stroke: currentColor;
+    stroke-opacity: 0.55;
+    stroke-width: 1.25px;
+  }
+
+  .stroke-soft {
+    stroke: currentColor;
+    stroke-opacity: 0.28;
+    stroke-width: 1px;
+  }
+
+  .amberline {
+    stroke: currentColor;
+    stroke-width: 1.5px;
+  }
+
+  .amberfill {
+    fill: currentColor;
+  }
+
+  .node {
+    fill: currentColor;
+    fill-opacity: 0.7;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.has-scroll-reveals .spec-row) .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    :global(.has-scroll-reveals .spec-row.is-revealed) .draw {
+      animation: figure-draw 700ms var(--ease-ui) forwards;
+    }
+
+    :global(.has-scroll-reveals .spec-row.is-revealed) .draw--amber {
+      animation-delay: 400ms;
+    }
+
+    .figure__core {
+      animation: core-load 7s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+
+    .figure.is-live .figure__core {
+      animation-play-state: running;
+    }
+
+    .figure__leaders {
+      animation: leader-flow 2.8s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .figure.is-live .figure__leaders {
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes figure-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes core-load {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(2.5px);
+    }
+  }
+
+  @keyframes leader-flow {
+    to {
+      stroke-dashoffset: -14;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .figure *,
+    .figure {
+      animation: none !important;
+    }
+  }
+</style>

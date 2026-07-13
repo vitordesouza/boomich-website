@@ -1,0 +1,164 @@
+<svg
+  class="figure figure--signal"
+  data-figure
+  role="img"
+  aria-label="Figure: a noisy input signal processed through three chambers into a clean output"
+  viewBox="0 72 420 112"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <clipPath id="signal-output-clip">
+      <rect x="300" y="112" width="112" height="32"></rect>
+    </clipPath>
+  </defs>
+  <path
+    class="stroke draw"
+    pathLength="1"
+    d="m8 128 20 0 8-32 8 62 8-50 8 34 10-20 14 6"></path>
+  <g class="figure__machine stroke">
+    <rect class="draw" pathLength="1" x="120" y="92" width="180" height="72"
+    ></rect>
+    <path class="draw" pathLength="1" d="M180 92v72M240 92v72"></path>
+    <path class="draw stroke-soft" pathLength="1" d="M122 166h176M124 168h172"
+    ></path>
+  </g>
+  <g class="stroke-soft">
+    <path class="draw" pathLength="1" d="M168 128h24m-5-5 5 5-5 5"></path>
+    <path class="draw" pathLength="1" d="M228 128h24m-5-5 5 5-5 5"></path>
+  </g>
+  <g class="node">
+    <rect x="178" y="90" width="4" height="4"></rect>
+    <rect x="238" y="90" width="4" height="4"></rect>
+  </g>
+  <g class="figure__pulse" color="var(--color-amber)">
+    <circle class="amberfill" cx="150" cy="128" r="3"></circle>
+  </g>
+  <g class="figure__out" clip-path="url(#signal-output-clip)">
+    <path
+      class="stroke draw"
+      pathLength="1"
+      d="M300 128c12-24 24-24 36 0s24 24 36 0 24-24 36 0 24 24 36 0"></path>
+  </g>
+  <text class="figure__label" x="120" y="84">IN</text>
+  <text class="figure__label" x="279" y="84">OUT</text>
+</svg>
+
+<style>
+  .figure {
+    width: 100%;
+    color: var(--color-ink);
+    overflow: visible;
+  }
+
+  .stroke,
+  .stroke-soft,
+  .amberline {
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+  }
+
+  .stroke {
+    stroke: currentColor;
+    stroke-opacity: 0.55;
+    stroke-width: 1.25px;
+  }
+
+  .stroke-soft {
+    stroke: currentColor;
+    stroke-opacity: 0.28;
+    stroke-width: 1px;
+  }
+
+  .amberline {
+    stroke: currentColor;
+    stroke-width: 1.5px;
+  }
+
+  .amberfill {
+    fill: currentColor;
+  }
+
+  .node {
+    fill: currentColor;
+    fill-opacity: 0.7;
+  }
+
+  .figure__label {
+    fill: var(--color-ink-faint);
+    font-family: var(--font-readout);
+    font-size: 9px;
+    font-weight: var(--type-readout-weight);
+    letter-spacing: 0.1em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.has-scroll-reveals .spec-row) .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    :global(.has-scroll-reveals .spec-row.is-revealed) .draw {
+      animation: figure-draw 700ms var(--ease-ui) forwards;
+    }
+
+    .figure__pulse {
+      animation: signal-load 6s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .figure.is-live .figure__pulse {
+      animation-play-state: running;
+    }
+
+    .figure__out {
+      animation: signal-phase 4s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .figure.is-live .figure__out {
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes figure-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes signal-load {
+    0%,
+    13% {
+      transform: translateX(0);
+    }
+
+    25%,
+    38% {
+      transform: translateX(60px);
+    }
+
+    50%,
+    63% {
+      transform: translateX(120px);
+    }
+
+    78%,
+    100% {
+      transform: translateX(150px);
+    }
+  }
+
+  @keyframes signal-phase {
+    to {
+      transform: translateX(-24px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .figure *,
+    .figure {
+      animation: none !important;
+    }
+  }
+</style>

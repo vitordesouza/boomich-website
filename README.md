@@ -22,6 +22,7 @@ The hero is **The Net**, a dependency-free full-bleed canvas lattice suspended b
 - `src/pages/` contains the static routes, including the Open Graph card and 404.
 - `src/components/` contains small Astro components; site copy lives in `src/content/site.ts`.
 - `src/instrument/` contains pure physics, envelope clamping, canvas rendering, and the mounted controller.
+- `src/components/figures/` holds the inline engraved capability figures; `scripts/portrait.mjs` creates the Studio portrait assets from an untracked original.
 - `src/styles/` contains the token, font, base, and shared-component layers.
 - `public/` holds self-hosted fonts, icons, generated Open Graph image, and crawler directives.
 

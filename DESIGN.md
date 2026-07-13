@@ -74,7 +74,7 @@ Explicitly rejected: the AI-default dev-portfolio formula (dark hero, heavy grot
 - Machined geometry: flush edges, mitered joins, 7px chamfered corners on interactive elements. No border radius curves elsewhere.
 - Type: Panchang (wide, squared, display only, two levels), Switzer (calm body), Martian Mono (readouts only).
 - The mark: the Truss B. A load-bearing letterform, stroke-drawn, currentColor.
-- Motion: physical and settling (the artifact), or fast and dry (UI). Nothing loops for decoration.
+- Motion: physical and settling (the artifact), or fast and dry (UI). Ambient cycles are allowed only when they demonstrate the system depicted.
 
 ## 2. Colors
 
@@ -149,12 +149,18 @@ Favicon: mark-small, ink on ground, in SVG + 32px PNG.
 - **Readout panel**: chamfered Ground Raised panel housing the instrument's live values.
 - **Forms** (contact): chamfered fields, Ground Recessed wells, 1px Line borders, Ink text; focus ring per buttons. Submission in flight is a legitimate amber state.
 - **Footer**: Ground Recessed, hairline top rule, colophon line, GitHub link, LDA registration line.
+- **Figures**: engraved technical illustrations in capability rows. Use hairline ink strokes, with exactly one amber load element per figure: the subject being carried, measured, or transferred. Mono labels are permitted only for real semantics such as IN/OUT. Structure draws on reveal; one slow ambient load cycle may run while the figure is onscreen.
+
+### Photography exception
+
+Photography is banned except for the principal's real portrait in the Studio section. It is cropped tightly, duotoned into the Ground-to-Ink brand ramp, and framed with a 1px Line rule. Stock and generated imagery remain banned.
 
 ## 8. Motion
 
 - UI: fast and dry. 160ms hovers, 420ms structural transitions, easing `cubic-bezier(0.16, 1, 0.3, 1)`. No bounce outside the physics artifact.
 - Entrances: content is visible by default; reveals are enhancement only (translateY 14px + opacity, 500ms, staggered within a group, triggered on scroll intent). Never gate visibility on JS.
 - The artifact owns all springy motion. UI chrome never bounces.
+- Ambient motion is sanctioned only where it demonstrates the system it depicts: the Net's idle wave and each figure's load cycle. These cycles pause offscreen and all die under reduced motion.
 - `prefers-reduced-motion: reduce`: all entrances instant, artifact static, no ambient cycle.
 
 ## 9. Do / Don't
@@ -171,6 +177,6 @@ Favicon: mark-small, ink on ground, in SVG + 32px PNG.
 
 - No second accent, no red, no gradient, no shadow, no glassmorphism, no cards, no icon set, no emoji.
 - No mono eyebrows, no numbered section scaffolding, no uppercase outside readouts.
-- No photography, no decorative geometry, no fake precision (invented report IDs, fake coordinates, fake specs).
-- No auto-looping decoration; the ambient idle cycle of the instrument is the single sanctioned ambient motion and it dies under reduced motion.
+- No photography beyond the principal's treated Studio portrait, no decorative geometry, no fake precision (invented report IDs, fake coordinates, fake specs).
+- No auto-looping decoration; ambient motion is permitted only for the Net's idle wave and figure load cycles, and dies under reduced motion.
 - Never scale Panchang below the headline level; never use it for UI.

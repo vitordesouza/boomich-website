@@ -28,6 +28,17 @@
     window.setTimeout(revealAll, 2500);
     window.addEventListener('beforeprint', revealAll, { once: true });
 
+    const figures = document.querySelectorAll<HTMLElement>('[data-figure]');
+    const figureObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-live', entry.isIntersecting);
+        });
+      },
+      { threshold: 0.12 },
+    );
+    figures.forEach((figure) => figureObserver.observe(figure));
+
     const hero = document.querySelector<HTMLElement>('[data-net-hero]');
     const canvas = hero?.querySelector<HTMLCanvasElement>('[data-net-canvas]');
     if (hero && canvas) {

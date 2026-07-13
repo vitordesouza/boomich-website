@@ -40,7 +40,7 @@ Emotional goal: the calm of handing a heavy thing to someone who visibly holds i
 - **Construction LARP**: hazard chevrons, stencil fonts, blueprint grids, crane silhouettes.
 - **SaaS clichés**: gradient heroes, glassmorphism, stat blocks, identical card grids, testimonial carousels.
 - **Fabricated proof**: invented clients, testimonials, metrics, team members, or fake report numbers. Real facts only, anonymized under NDA where required.
-- **Stock photography**: none, ever. The instrument is the imagery.
+- **Photography**: banned, with one exception: the principal's real portrait in the Studio section, duotoned into the brand ramp. Stock and generated imagery remain banned.
 
 ## Design Principles
 

@@ -1,0 +1,133 @@
+<svg
+  class="figure figure--seam"
+  data-figure
+  role="img"
+  aria-label="Figure: three machined plates joined by one load-bearing seam"
+  viewBox="82 4 196 270"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <g class="stroke">
+    <path class="draw" pathLength="1" d="m96 60 84-48 84 48-84 48Z"></path>
+    <path class="draw" pathLength="1" d="m96 60v8l84 48v-8"></path>
+    <path class="draw" pathLength="1" d="m264 60-84 48v8l84-48Z"></path>
+    <path class="draw stroke-soft" pathLength="1" d="m105 60 75-43 75 43-75 43Z"
+    ></path>
+    <path class="draw" pathLength="1" d="m96 130 84-48 84 48-84 48Z"></path>
+    <path class="draw" pathLength="1" d="m96 130v8l84 48v-8"></path>
+    <path class="draw" pathLength="1" d="m264 130-84 48v8l84-48Z"></path>
+    <path
+      class="draw stroke-soft"
+      pathLength="1"
+      d="m105 130 75-43 75 43-75 43Z"></path>
+    <path class="draw" pathLength="1" d="m96 200 84-48 84 48-84 48Z"></path>
+    <path class="draw" pathLength="1" d="m96 200v8l84 48v-8"></path>
+    <path class="draw" pathLength="1" d="m264 200-84 48v8l84-48Z"></path>
+    <path
+      class="draw stroke-soft"
+      pathLength="1"
+      d="m105 200 75-43 75 43-75 43Z"></path>
+  </g>
+  <g color="var(--color-amber)">
+    <path class="amberline draw draw--amber" pathLength="1" d="M180 4v252"
+    ></path>
+    <circle class="amberfill" cx="180" cy="108" r="2.4"></circle>
+    <circle class="amberfill" cx="180" cy="178" r="2.4"></circle>
+    <circle class="figure__load amberfill" cx="180" cy="4" r="3"></circle>
+  </g>
+  <g class="stroke">
+    <path class="draw" pathLength="1" d="M168 260h24"></path>
+    <path class="draw stroke-soft" pathLength="1" d="M172 268h16"></path>
+  </g>
+</svg>
+
+<style>
+  .figure {
+    width: 100%;
+    color: var(--color-ink);
+    overflow: visible;
+  }
+
+  .stroke,
+  .stroke-soft,
+  .amberline {
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+  }
+
+  .stroke {
+    stroke: currentColor;
+    stroke-opacity: 0.55;
+    stroke-width: 1.25px;
+  }
+
+  .stroke-soft {
+    stroke: currentColor;
+    stroke-opacity: 0.28;
+    stroke-width: 1px;
+  }
+
+  .amberline {
+    stroke: currentColor;
+    stroke-width: 1.5px;
+  }
+
+  .amberfill {
+    fill: currentColor;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.has-scroll-reveals .spec-row) .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    :global(.has-scroll-reveals .spec-row.is-revealed) .draw {
+      animation: figure-draw 700ms var(--ease-ui) forwards;
+    }
+
+    :global(.has-scroll-reveals .spec-row.is-revealed) .draw--amber {
+      animation-delay: 400ms;
+    }
+
+    .figure__load {
+      animation: seam-load 8s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+
+    .figure.is-live .figure__load {
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes figure-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes seam-load {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+
+    8%,
+    76% {
+      opacity: 1;
+    }
+
+    88%,
+    100% {
+      opacity: 0;
+      transform: translateY(256px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .figure *,
+    .figure {
+      animation: none !important;
+    }
+  }
+</style>

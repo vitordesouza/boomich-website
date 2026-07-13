@@ -1,5 +1,10 @@
 ---
 import { site } from '../content/site';
+import FigCore from './figures/FigCore.astro';
+import FigSeam from './figures/FigSeam.astro';
+import FigSignal from './figures/FigSignal.astro';
+
+const figures = [FigCore, FigSignal, FigSeam];
 ---
 
 <section
@@ -18,12 +23,20 @@ import { site } from '../content/site';
             style={`--reveal-delay: ${index * 60}ms`}
           >
             <h3>{item.title}</h3>
-            <p>{item.body}</p>
-            <ul aria-label={`${item.title} technologies`}>
-              {item.tags.map((tag) => (
-                <li>{tag}</li>
-              ))}
-            </ul>
+            <div class="spec-row__figure">
+              {(() => {
+                const Figure = figures[index];
+                return <Figure />;
+              })()}
+            </div>
+            <div class="spec-row__content">
+              <p>{item.body}</p>
+              <ul aria-label={`${item.title} technologies`}>
+                {item.tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            </div>
           </article>
         ))
       }
@@ -63,12 +76,12 @@ import { site } from '../content/site';
   .spec-row {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(12rem, 0.76fr) minmax(0, 1.25fr) minmax(
+    grid-template-columns: minmax(11rem, 0.65fr) minmax(0, 1.25fr) minmax(
         12rem,
-        0.82fr
+        14.375rem
       );
     gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
-    align-items: start;
+    align-items: center;
     padding: clamp(1.5rem, 3.5vw, 2.5rem) 0;
     transition: background-color 160ms var(--ease-ui);
   }
@@ -126,6 +139,11 @@ import { site } from '../content/site';
     line-height: 1.35;
   }
 
+  .spec-row__content {
+    display: grid;
+    gap: 1.25rem;
+  }
+
   .spec-row p {
     max-width: 55ch;
     color: var(--color-ink-secondary);
@@ -144,6 +162,17 @@ import { site } from '../content/site';
     gap: 0.45rem;
   }
 
+  .spec-row__figure {
+    width: min(100%, 230px);
+  }
+
+  /* The signal figure is wide-aspect; give it more run so its machine
+     reads at the same visual weight as the other figures. */
+  .spec-row:nth-of-type(2) .spec-row__figure {
+    width: min(100%, 300px);
+    justify-self: end;
+  }
+
   .spec-row li {
     padding: 0.33rem 0.5rem;
     border: 1px solid var(--color-line);
@@ -159,13 +188,15 @@ import { site } from '../content/site';
     }
   }
 
-  @media (max-width: 879px) {
+  @media (max-width: 979px) {
     .spec-row {
-      grid-template-columns: minmax(0, 1fr) minmax(11rem, 0.65fr);
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
     }
 
-    .spec-row p {
-      grid-column: 1 / -1;
+    .spec-row__figure {
+      width: min(100%, 260px);
+      justify-self: start;
     }
   }
 
@@ -173,10 +204,6 @@ import { site } from '../content/site';
     .spec-row {
       grid-template-columns: 1fr;
       gap: 1rem;
-    }
-
-    .spec-row p {
-      grid-column: auto;
     }
   }
 </style>
