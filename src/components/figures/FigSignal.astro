@@ -2,58 +2,82 @@
   class="figure figure--signal"
   data-figure
   role="img"
-  aria-label="Figure: a noisy input signal processed through three chambers into a clean output"
-  viewBox="0 72 420 112"
+  aria-label="Figure: a noisy input signal passes through a machined housing and leaves clean"
+  viewBox="0 0 320 240"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <defs>
-    <clipPath id="signal-output-clip">
-      <rect x="300" y="112" width="112" height="32"></rect>
-    </clipPath>
-  </defs>
   <path
     class="stroke draw"
     pathLength="1"
-    d="m8 128 20 0 8-32 8 62 8-50 8 34 10-20 14 6"></path>
-  <g class="figure__machine stroke">
-    <rect class="draw" pathLength="1" x="120" y="92" width="180" height="72"
-    ></rect>
-    <path class="draw" pathLength="1" d="M180 92v72M240 92v72"></path>
-    <path class="draw stroke-soft" pathLength="1" d="M122 166h176M124 168h172"
-    ></path>
-  </g>
-  <g class="stroke-soft">
-    <path class="draw" pathLength="1" d="M168 128h24m-5-5 5 5-5 5"></path>
-    <path class="draw" pathLength="1" d="M228 128h24m-5-5 5 5-5 5"></path>
-  </g>
-  <g class="node">
-    <rect x="178" y="90" width="4" height="4"></rect>
-    <rect x="238" y="90" width="4" height="4"></rect>
-  </g>
-  <g class="figure__pulse" color="var(--color-amber)">
-    <circle class="amberfill" cx="150" cy="128" r="3"></circle>
-  </g>
-  <g class="figure__out" clip-path="url(#signal-output-clip)">
+    d="M30.1 49 L36.2 62 L42.2 46.7 L48.3 53.5 L54.3 75.3 L60.4 65.4 L66.5 75.6 L72.5 84.8 L78.6 84.3 L84.7 76.8 L90.7 90.1 L96.8 75.3 L102.8 93.5 L108.9 86 L115 106.1"
+  ></path>
+  <g class="figure__block">
     <path
       class="stroke draw"
       pathLength="1"
-      d="M300 128c12-24 24-24 36 0s24 24 36 0 24-24 36 0 24 24 36 0"></path>
+      d="M111.5 100 L166.9 132 L208.5 108"></path>
+    <path
+      class="stroke-soft draw d2"
+      pathLength="1"
+      d="M208.5 108 L153.1 76 L111.5 100"></path>
+    <path
+      class="stroke draw"
+      pathLength="1"
+      d="M166.9 132 L166.9 174 L208.5 150 M166.9 174 L111.5 142 L111.5 100"
+    ></path>
+    <path class="stroke draw d2" pathLength="1" d="M166.9 132 L166.9 174"
+    ></path>
+    <path
+      class="stroke-soft draw d2"
+      pathLength="1"
+      d="M118.4 112 L160 136 L160 162 L118.4 138Z"></path>
+    <path class="stroke-soft draw d2" pathLength="1" d="M161.7 93 L140.9 105"
+    ></path>
+    <path class="stroke-soft draw d2" pathLength="1" d="M170.4 98 L149.6 110"
+    ></path>
+    <path class="stroke-soft draw d2" pathLength="1" d="M179.1 103 L158.3 115"
+    ></path>
   </g>
-  <text class="figure__label" x="120" y="84">IN</text>
-  <text class="figure__label" x="279" y="84">OUT</text>
+  <path
+    class="stroke-soft dashed fade"
+    d="M115 106.1 L118.4 91.3 L121.9 107.3 L125.4 107.4 L128.8 117.8 L132.3 105.4 L135.8 104.8 L139.2 105.7 L142.7 116.7 L146.1 119.3 L149.6 109.5 L153.1 113.3 L156.5 116.6 L160 126.5 L163.5 127.1 L166.9 132.1 L170.4 137.3 L173.9 137 L177.3 140.6 L180.8 143.3 L184.2 142.1 L187.7 140"
+  ></path>
+  <path
+    class="stroke draw d2"
+    pathLength="1"
+    d="M183.4 142.5 L183.5 141.1 L184 139.7 L184.7 138.2 L185.5 136.9 L186.6 135.8 L187.7 135 L188.8 134.5 L189.9 134.4 L190.8 134.7 L191.5 135.3 L191.9 136.3 L192 137.5 L191.9 138.9 L191.5 140.3 L190.8 141.8 L189.9 143.1 L188.8 144.2 L187.7 145 L186.6 145.5 L185.5 145.6 L184.7 145.3 L184 144.7 L183.5 143.7 L183.4 142.5Z"
+  ></path>
+  <path
+    class="stroke-soft draw d2"
+    pathLength="1"
+    d="M181.2 143.8 L181.4 141.7 L182.1 139.5 L183.1 137.3 L184.5 135.4 L186 133.7 L187.7 132.5 L189.4 131.8 L191 131.6 L192.3 132 L193.3 133 L194 134.4 L194.2 136.3 L194 138.3 L193.3 140.5 L192.3 142.7 L191 144.6 L189.4 146.3 L187.7 147.5 L186 148.2 L184.5 148.4 L183.1 148 L182.1 147 L181.4 145.6 L181.2 143.8Z"
+  ></path>
+  <path
+    class="stroke draw"
+    pathLength="1"
+    d="M187.7 140 L190.3 138.5 L192.9 137.4 L195.5 136.9 L198.1 137.2 L200.7 138.6 L203.3 140.9 L205.9 144.1 L208.5 148.1 L211.1 152.5 L213.7 157 L216.3 161.3 L218.9 165 L221.5 168 L224.1 170 L226.7 171 L229.3 171 L231.9 170.3 L234.5 169 L237.1 167.5 L239.7 166.1 L242.3 165.1 L244.9 164.9 L247.5 165.6 L250.1 167.2 L252.7 169.9 L255.3 173.4 L257.9 177.5 L260.5 182 L263.1 186.5 L265.7 190.6 L268.3 194.1 L270.9 196.8 L273.4 198.4 L276 199.1 L278.6 198.9 L281.2 197.9 L283.8 196.5 L286.4 195 L289 193.7"
+  ></path>
+  <text class="figure__label" x="28.1" y="35">IN</text>
+  <text class="figure__label" x="265" y="177.7">OUT</text>
+  <circle
+    class="figure__pulse amberfill"
+    color="var(--color-amber)"
+    r="3"
+    style="offset-path: path('M30.1 49 L36.2 62 L42.2 46.7 L48.3 53.5 L54.3 75.3 L60.4 65.4 L66.5 75.6 L72.5 84.8 L78.6 84.3 L84.7 76.8 L90.7 90.1 L96.8 75.3 L102.8 93.5 L108.9 86 L115 106.1 L118.4 91.3 L121.9 107.3 L125.4 107.4 L128.8 117.8 L132.3 105.4 L135.8 104.8 L139.2 105.7 L142.7 116.7 L146.1 119.3 L149.6 109.5 L153.1 113.3 L156.5 116.6 L160 126.5 L163.5 127.1 L166.9 132.1 L170.4 137.3 L173.9 137 L177.3 140.6 L180.8 143.3 L184.2 142.1 L187.7 140 L190.3 138.5 L192.9 137.4 L195.5 136.9 L198.1 137.2 L200.7 138.6 L203.3 140.9 L205.9 144.1 L208.5 148.1 L211.1 152.5 L213.7 157 L216.3 161.3 L218.9 165 L221.5 168 L224.1 170 L226.7 171 L229.3 171 L231.9 170.3 L234.5 169 L237.1 167.5 L239.7 166.1 L242.3 165.1 L244.9 164.9 L247.5 165.6 L250.1 167.2 L252.7 169.9 L255.3 173.4 L257.9 177.5 L260.5 182 L263.1 186.5 L265.7 190.6 L268.3 194.1 L270.9 196.8 L273.4 198.4 L276 199.1 L278.6 198.9 L281.2 197.9 L283.8 196.5 L286.4 195 L289 193.7')"
+  ></circle>
 </svg>
 
 <style>
   .figure {
     width: 100%;
+    height: 100%;
     color: var(--color-ink);
     overflow: visible;
   }
 
   .stroke,
-  .stroke-soft,
-  .amberline {
+  .stroke-soft {
     stroke-linecap: butt;
     stroke-linejoin: miter;
   }
@@ -70,18 +94,13 @@
     stroke-width: 1px;
   }
 
-  .amberline {
-    stroke: currentColor;
-    stroke-width: 1.5px;
+  /* Hidden-line convention: the wire inside the housing is dashed. */
+  .dashed {
+    stroke-dasharray: 4 3;
   }
 
   .amberfill {
     fill: currentColor;
-  }
-
-  .node {
-    fill: currentColor;
-    fill-opacity: 0.7;
   }
 
   .figure__label {
@@ -92,31 +111,42 @@
     letter-spacing: 0.1em;
   }
 
+  .figure__pulse {
+    opacity: 0;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
-    :global(.has-scroll-reveals .spec-row) .draw {
+    :global(.has-scroll-reveals) .figure:not(.is-drawn) .draw {
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
     }
 
-    :global(.has-scroll-reveals .spec-row.is-revealed) .draw {
-      animation: figure-draw 700ms var(--ease-ui) forwards;
+    :global(.has-scroll-reveals) .figure:not(.is-drawn) .fade {
+      opacity: 0;
     }
 
+    .figure.is-drawn .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: figure-draw 800ms var(--ease-ui) forwards;
+    }
+
+    .figure.is-drawn .d2 {
+      animation-delay: 250ms;
+    }
+
+    .figure.is-drawn .fade {
+      animation: figure-fade 400ms var(--ease-ui) 600ms both;
+    }
+
+    /* One pulse rides the whole wire — jagged in, dimmed while inside the
+       housing, bright and clean out. Ends dark on both sides of the loop. */
     .figure__pulse {
-      animation: signal-load 6s linear infinite;
+      animation: signal-travel 7s linear 1.6s infinite;
       animation-play-state: paused;
     }
 
-    .figure.is-live .figure__pulse {
-      animation-play-state: running;
-    }
-
-    .figure__out {
-      animation: signal-phase 4s linear infinite;
-      animation-play-state: paused;
-    }
-
-    .figure.is-live .figure__out {
+    .figure.is-drawn.is-live .figure__pulse {
       animation-play-state: running;
     }
   }
@@ -127,38 +157,76 @@
     }
   }
 
-  @keyframes signal-load {
-    0%,
-    13% {
-      transform: translateX(0);
+  @keyframes figure-fade {
+    from {
+      opacity: 0;
     }
 
-    25%,
-    38% {
-      transform: translateX(60px);
-    }
-
-    50%,
-    63% {
-      transform: translateX(120px);
-    }
-
-    78%,
-    100% {
-      transform: translateX(150px);
+    to {
+      opacity: 1;
     }
   }
 
-  @keyframes signal-phase {
-    to {
-      transform: translateX(-24px);
+  @keyframes signal-travel {
+    0% {
+      offset-distance: 0%;
+      opacity: 0;
+    }
+
+    4% {
+      opacity: 1;
+    }
+
+    38.7% {
+      opacity: 1;
+    }
+
+    41% {
+      opacity: 0.3;
+    }
+
+    66% {
+      opacity: 0.3;
+    }
+
+    68.4% {
+      opacity: 1;
+    }
+
+    90% {
+      opacity: 1;
+    }
+
+    96%,
+    100% {
+      offset-distance: 100%;
+      opacity: 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .figure *,
-    .figure {
+    .figure,
+    .figure * {
       animation: none !important;
+    }
+
+    /* Static state: the processed signal, already past the housing. */
+    .figure__pulse {
+      opacity: 1;
+      offset-distance: 76%;
+    }
+  }
+
+  @media print {
+    .draw {
+      animation: none !important;
+      stroke-dasharray: none !important;
+      stroke-dashoffset: 0 !important;
+    }
+
+    .fade {
+      animation: none !important;
+      opacity: 1 !important;
     }
   }
 </style>

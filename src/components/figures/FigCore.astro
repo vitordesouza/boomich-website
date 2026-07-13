@@ -3,57 +3,75 @@
   data-figure
   role="img"
   aria-label="Figure: one shared core suspended above two device platforms"
-  viewBox="18 24 324 206"
+  viewBox="0 0 320 240"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
 >
   <g class="figure__structure">
-    <g class="stroke">
-      <path class="draw" pathLength="1" d="M28 168 73 142 149 186 104 212Z"
-      ></path>
-      <path class="draw" pathLength="1" d="M28 168v12l76 44v-12"></path>
-      <path class="draw" pathLength="1" d="M149 186v12l-45 26v-12"></path>
-      <path
-        class="draw stroke-soft"
-        pathLength="1"
-        d="m41 168 33-19 62 36-33 19Z"></path>
-      <path class="draw" pathLength="1" d="M211 186l76-44 45 26-76 44Z"></path>
-      <path class="draw" pathLength="1" d="m211 186 76 44v-12l-76-44"></path>
-      <path class="draw" pathLength="1" d="m332 168-45 26v36l45-26Z"></path>
-      <path
-        class="draw stroke-soft"
-        pathLength="1"
-        d="m224 185 62-36 33 19-62 36Z"></path>
-    </g>
-    <circle class="node" cx="72" cy="151" r="2"></circle>
-    <circle class="node" cx="288" cy="151" r="2"></circle>
-    <circle class="node" cx="52" cy="170" r="1.5"></circle>
-    <circle class="node" cx="308" cy="170" r="1.5"></circle>
+    <path
+      class="stroke draw"
+      pathLength="1"
+      d="M138 57 L193.4 89 L86 151 L30.6 119Z"></path>
+    <path
+      class="stroke draw"
+      pathLength="1"
+      d="M193.4 89 L193.4 98 L86 160 L30.6 128 L30.6 119"></path>
+    <path class="stroke draw d2" pathLength="1" d="M86 151 L86 160"></path>
+    <path
+      class="stroke-soft draw d2"
+      pathLength="1"
+      d="M135.4 65.5 L178.7 90.5 L86.9 143.5 L43.6 118.5Z"></path>
+    <circle class="node" cx="70.5" cy="128" r="1.6"></circle>
+    <ellipse class="ring stroke-soft fade" cx="112" cy="104" rx="8.6" ry="4.9"
+    ></ellipse>
+    <circle class="node fade" cx="112" cy="104" r="1.6"></circle>
+    <path
+      class="stroke draw"
+      pathLength="1"
+      d="M235 113 L290.4 145 L183 207 L127.6 175Z"></path>
+    <path
+      class="stroke draw"
+      pathLength="1"
+      d="M290.4 145 L290.4 154 L183 216 L127.6 184 L127.6 175"></path>
+    <path class="stroke draw d2" pathLength="1" d="M183 207 L183 216"></path>
+    <path
+      class="stroke-soft draw d2"
+      pathLength="1"
+      d="M232.4 121.5 L275.7 146.5 L183.9 199.5 L140.6 174.5Z"></path>
+    <circle class="node" cx="167.4" cy="184" r="1.6"></circle>
+    <ellipse class="ring stroke-soft fade" cx="209" cy="160" rx="8.6" ry="4.9"
+    ></ellipse>
+    <circle class="node fade" cx="209" cy="160" r="1.6"></circle>
   </g>
-
-  <g class="figure__leaders stroke-soft" stroke-dasharray="3 4">
-    <path class="draw" pathLength="1" d="M167 105 72 151"></path>
-    <path class="draw" pathLength="1" d="m193 105 95 46"></path>
+  <g class="figure__leaders" stroke-dasharray="3 4">
+    <path class="stroke-soft fade" d="M160.5 90 L120.6 101.5"></path>
+    <path class="stroke-soft fade" d="M160.5 90 L203.9 152.6"></path>
   </g>
-
   <g class="figure__core" color="var(--color-amber)">
-    <g class="amberline">
-      <path
-        class="draw draw--amber"
-        pathLength="1"
-        d="m158 70 22-13 22 13-22 13Z"></path>
-      <path class="draw draw--amber" pathLength="1" d="m158 70v23l22 13V83"
-      ></path>
-      <path class="draw draw--amber" pathLength="1" d="m202 70v23l-22 13"
-      ></path>
-    </g>
-    <circle class="amberfill" cx="180" cy="106" r="2.6"></circle>
+    <path
+      class="solid fade"
+      d="M160.5 30 L186.5 45 L186.5 75 L160.5 90 L134.5 75 L134.5 45Z"></path>
+    <path
+      class="amberline draw draw--amber"
+      pathLength="1"
+      d="M160.5 30 L186.5 45 L160.5 60 L134.5 45Z"></path>
+    <path
+      class="amberline draw draw--amber"
+      pathLength="1"
+      d="M186.5 45 L186.5 75 L160.5 90 L134.5 75 L134.5 45"></path>
+    <path
+      class="amberline draw draw--amber"
+      pathLength="1"
+      d="M160.5 60 L160.5 90"></path>
+    <circle class="amberfill figure__core-pt" cx="160.5" cy="90" r="2.6"
+    ></circle>
   </g>
 </svg>
 
 <style>
   .figure {
     width: 100%;
+    height: 100%;
     color: var(--color-ink);
     overflow: visible;
   }
@@ -91,35 +109,73 @@
     fill-opacity: 0.7;
   }
 
+  /* The core is the one solid form in the drawing: a ground-colored
+     silhouette occludes the wireframe passing behind it. */
+  .solid {
+    fill: var(--color-ground-recessed);
+  }
+
   @media (prefers-reduced-motion: no-preference) {
-    :global(.has-scroll-reveals .spec-row) .draw {
+    /* Draw-in is keyed to .is-drawn, added by the figure observer the
+       first time the figure is actually seen — never by reveal fallbacks. */
+    :global(.has-scroll-reveals) .figure:not(.is-drawn) .draw {
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
     }
 
-    :global(.has-scroll-reveals .spec-row.is-revealed) .draw {
-      animation: figure-draw 700ms var(--ease-ui) forwards;
+    :global(.has-scroll-reveals) .figure:not(.is-drawn) .fade {
+      opacity: 0;
     }
 
-    :global(.has-scroll-reveals .spec-row.is-revealed) .draw--amber {
-      animation-delay: 400ms;
+    .figure.is-drawn .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: figure-draw 800ms var(--ease-ui) forwards;
     }
 
-    .figure__core {
-      animation: core-load 7s ease-in-out infinite;
+    .figure.is-drawn .d2 {
+      animation-delay: 250ms;
+    }
+
+    .figure.is-drawn .draw--amber {
+      animation-delay: 700ms;
+    }
+
+    .figure.is-drawn .fade {
+      animation: figure-fade 400ms var(--ease-ui) 600ms both;
+    }
+
+    /* Ambient: the core takes load and the structure answers — the cube
+       swells, the contact point presses, the dock rings respond a beat
+       later, and the leaders stream toward the platforms. */
+    .figure__core .amberline {
+      animation: core-swell 7s ease-in-out 1.6s infinite;
       animation-play-state: paused;
     }
 
-    .figure.is-live .figure__core {
-      animation-play-state: running;
+    .figure__core-pt,
+    .ring {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .figure__core-pt {
+      animation: core-pt 7s ease-in-out 1.6s infinite;
+      animation-play-state: paused;
+    }
+
+    .ring {
+      animation: ring-pulse 7s ease-in-out 1.6s infinite;
+      animation-play-state: paused;
     }
 
     .figure__leaders {
-      animation: leader-flow 2.8s linear infinite;
+      animation: leader-flow 2.8s linear 1.6s infinite;
       animation-play-state: paused;
     }
 
-    .figure.is-live .figure__leaders {
+    .figure.is-drawn.is-live
+      :is(.figure__core .amberline, .figure__core-pt, .ring, .figure__leaders) {
       animation-play-state: running;
     }
   }
@@ -130,14 +186,49 @@
     }
   }
 
-  @keyframes core-load {
+  @keyframes figure-fade {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes core-swell {
     0%,
     100% {
-      transform: translateY(0);
+      stroke-width: 1.5px;
     }
 
     50% {
-      transform: translateY(2.5px);
+      stroke-width: 1.95px;
+    }
+  }
+
+  @keyframes core-pt {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.35);
+    }
+  }
+
+  @keyframes ring-pulse {
+    0%,
+    30%,
+    100% {
+      transform: scale(1);
+      stroke-opacity: 0.28;
+    }
+
+    62% {
+      transform: scale(1.12);
+      stroke-opacity: 0.5;
     }
   }
 
@@ -148,9 +239,22 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .figure *,
-    .figure {
+    .figure,
+    .figure * {
       animation: none !important;
+    }
+  }
+
+  @media print {
+    .draw {
+      animation: none !important;
+      stroke-dasharray: none !important;
+      stroke-dashoffset: 0 !important;
+    }
+
+    .fade {
+      animation: none !important;
+      opacity: 1 !important;
     }
   }
 </style>

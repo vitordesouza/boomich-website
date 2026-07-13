@@ -55,6 +55,15 @@ test('site loads, interactive controls work, and meets accessibility checks', as
     page.getByRole('heading', { level: 2, name: 'Bring us the hard part.' }),
   ).toBeVisible();
 
+  // Regression: figures draw on first sight, not on page load — the 2.5s
+  // reveal fallback must leave them alone while they are off-screen.
+  await page.waitForTimeout(2800);
+  await expect(page.locator('[data-figure].is-drawn')).toHaveCount(0);
+  const firstFigure = page.locator('[data-figure]').first();
+  await firstFigure.scrollIntoViewIfNeeded();
+  await expect(firstFigure).toHaveClass(/is-drawn/);
+  await expect(firstFigure).toHaveClass(/is-live/);
+
   await expect(
     page.getByRole('link', { name: 'joaovitor@boomich.pt' }),
   ).toHaveAttribute('href', 'mailto:joaovitor@boomich.pt');
@@ -146,6 +155,7 @@ test('hash navigation remains correct with and without motion enhancement', asyn
   await expect(page.locator('html')).not.toHaveClass(/has-scroll-reveals/);
   await expect(page.locator('[data-figure]')).toHaveCount(3);
   await expect(page.locator('[data-figure].is-live')).toHaveCount(0);
+  await expect(page.locator('[data-figure].is-drawn')).toHaveCount(0);
   await expect(page.locator('[data-figure] .draw').first()).toBeVisible();
   await page
     .getByLabel('Primary navigation')

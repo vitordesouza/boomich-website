@@ -28,14 +28,19 @@
     window.setTimeout(revealAll, 2500);
     window.addEventListener('beforeprint', revealAll, { once: true });
 
+    // Figures draw themselves the first time they are actually seen —
+    // .is-drawn comes only from this observer, never from the revealAll
+    // fallback, so the draw-in cannot finish off-screen before the visitor
+    // scrolls to it. .is-live gates the ambient loops to the viewport.
     const figures = document.querySelectorAll<HTMLElement>('[data-figure]');
     const figureObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('is-drawn');
           entry.target.classList.toggle('is-live', entry.isIntersecting);
         });
       },
-      { threshold: 0.12 },
+      { threshold: 0.3 },
     );
     figures.forEach((figure) => figureObserver.observe(figure));
 
