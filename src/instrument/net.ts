@@ -7,16 +7,16 @@ export const MAX_MEMBERS = 384;
 export const INTERACTION_RADIUS = 200;
 export const ENERGY_THRESHOLD = 22;
 
-const DAMPING = 0.985;
-const VELOCITY_COUPLING = 1.5;
-const POSITIONAL_PULL = 0.2;
+const DAMPING = 0.978;
+const VELOCITY_COUPLING = 1.1;
+const POSITIONAL_PULL = 0.14;
 const IDLE_WAVE_AMPLITUDE = 0.05;
-const MAX_DISPLACEMENT = 120;
+const MAX_DISPLACEMENT = 80;
 // Graded rest springs replace hard perimeter pins: the sheet is stiffest
 // near its supports (edges) and loosest in the middle, so the whole
 // surface responds to load, including at the borders.
 const REST_SPRING_EDGE = 0.05;
-const REST_SPRING_CENTER = 0.012;
+const REST_SPRING_CENTER = 0.02;
 
 export interface NetSpec {
   width: number;
