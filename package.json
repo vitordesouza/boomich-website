@@ -15,7 +15,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "pnpm format:check && pnpm lint && ASTRO_TELEMETRY_DISABLED=1 pnpm exec astro check && pnpm test && pnpm build"
+    "check": "pnpm format:check && pnpm lint && ASTRO_TELEMETRY_DISABLED=1 pnpm exec astro check && pnpm test && pnpm build",
+    "prepare": "node scripts/install-hooks.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.4",
